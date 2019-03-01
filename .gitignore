@@ -1,5 +1,9 @@
 HELP.md
+<<<<<<< HEAD
 **/target/
+=======
+/target/
+>>>>>>> 78c9024... InitCommit
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
