@@ -1,22 +1,46 @@
 package ru.epam.blog.core.domain;
 
-import com.google.gson.annotations.Expose;
+import ru.epam.blog.core.domain.enums.PersonGroup;
 
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
+@Entity
 public class Person {
 
-    @Expose
+    @Id
+    @GeneratedValue
     private Integer id;
-    @Expose
+    @Column(unique = true, nullable = false)
     private String login;
-    @Expose
-    private String lastName;
-    @Expose
+    @Column(nullable = false)
     private String firstName;
+    private String lastName;
+    @Column(nullable = false)
     private String password;
-    @Expose
+
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    private Collection<Comment> comments;
+
+    @OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
+    private Collection<Post> posts;
+
+    @ElementCollection(targetClass = PersonGroup.class, fetch = FetchType.LAZY)
+    @CollectionTable(name = "person_group", joinColumns = @JoinColumn(name = "person_id", nullable = false))
+    @Enumerated(EnumType.STRING)
     private Set<PersonGroup> personGroups;
+
+    public Person(String login, String firstName, String lastName, String password) {
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
+
+    public Person() {
+
+    }
 
     public Set<PersonGroup> getPersonGroups() {
         return personGroups;
@@ -64,5 +88,21 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Collection<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Collection<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Collection<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Collection<Post> posts) {
+        this.posts = posts;
     }
 }

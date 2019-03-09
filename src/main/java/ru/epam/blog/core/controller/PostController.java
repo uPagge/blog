@@ -6,7 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.epam.blog.core.domain.Post;
-import ru.epam.blog.core.domain.StatusPost;
+import ru.epam.blog.core.domain.enums.StatusPost;
 import ru.epam.blog.core.exce.InvalidBodyException;
 import ru.epam.blog.core.service.CommentService;
 import ru.epam.blog.core.service.PostService;
@@ -32,21 +32,10 @@ public class PostController {
 
     @PostMapping("/create")
     public ResponseEntity<String> create(@RequestBody Post post) {
-        post.setLoginUser(getLogin());
         try {
             return ResponseEntityGson.getJson(postService.created(post), HttpStatus.CREATED);
         } catch (InvalidBodyException e) {
             return ResponseEntityGson.getJson(e, HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @GetMapping("{id}/comment")
-    public ResponseEntity<String> getAllCommentPost(@PathVariable Integer id) {
-        Post post = postService.getById(id);
-        if (post != null && post.getStatusPost().equals(StatusPost.PUBLISHED)) {
-            return ResponseEntityGson.getJson(commentService.getByIdPost(id), HttpStatus.OK);
-        } else {
-            return ResponseEntityGson.getJson(new InvalidBodyException(), HttpStatus.BAD_REQUEST);
         }
     }
 

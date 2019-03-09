@@ -3,36 +3,37 @@ package ru.epam.blog.core.service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.epam.blog.core.domain.Person;
-import ru.epam.blog.core.domain.PersonGroup;
+import ru.epam.blog.core.domain.enums.PersonGroup;
 import ru.epam.blog.core.exce.ApiException;
 import ru.epam.blog.core.exce.InvalidBodyException;
 import ru.epam.blog.core.exce.LoginIsBusyException;
-import ru.epam.blog.core.perository.PersonRepository;
+import ru.epam.blog.core.perository.jpa.PersonRepositoryJpa;
 
 import java.util.Collections;
 
 @Service
-public class PersonServiceBean implements PersonService {
+public class PersonServiceImpl implements PersonService {
 
-    private PersonRepository personRepository;
+    private final PersonRepositoryJpa personRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-    public PersonServiceBean(PersonRepository personRepository) {
+    public PersonServiceImpl(PersonRepositoryJpa personRepository) {
         this.personRepository = personRepository;
     }
 
+
     @Override
     public Person getByLogin(String login) {
-        return personRepository.getByLogin(login);
+        return personRepository.findByLogin(login);
     }
 
     @Override
     public Person registration(Person person) throws ApiException {
-        if (!personRepository.checkByLogin(person.getLogin())) {
-            if (validPerson(person)) {
+        if (this.check(person.getLogin())) {
+            if (this.validPerson(person)) {
                 person.setPersonGroups(Collections.singleton(PersonGroup.USER));
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
                 person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
-                return personRepository.add(person);
+                return personRepository.saveAndFlush(person);
             } else {
                 throw new InvalidBodyException();
             }
@@ -43,12 +44,12 @@ public class PersonServiceBean implements PersonService {
 
     @Override
     public Boolean check(String login) {
-        return personRepository.getByLogin(login)!=null;
+        return personRepository.findByLogin(login) == null;
     }
 
     @Override
     public Integer getIdByLogin(String login) {
-        return personRepository.getByLogin(login).getId();
+        return personRepository.findByLogin(login).getId();
     }
 
     private boolean validPerson(Person person) {

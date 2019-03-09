@@ -1,7 +1,7 @@
 package ru.epam.blog.core.service;
 
 import ru.epam.blog.core.domain.Post;
-import ru.epam.blog.core.domain.StatusPost;
+import ru.epam.blog.core.domain.enums.StatusPost;
 import ru.epam.blog.core.exce.InvalidBodyException;
 
 import java.util.List;

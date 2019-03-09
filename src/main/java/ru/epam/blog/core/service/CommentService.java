@@ -4,7 +4,6 @@ import ru.epam.blog.core.domain.Comment;
 import ru.epam.blog.core.exce.InvalidBodyException;
 
 import java.util.List;
-import java.util.Map;
 
 public interface CommentService {
 

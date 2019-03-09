@@ -1,17 +1,36 @@
 package ru.epam.blog.core.domain;
 
+import ru.epam.blog.core.domain.enums.StatusPost;
+
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
+@Entity
 public class Post {
 
+    @Id
+    @GeneratedValue
     private Integer id;
+    @Column(nullable = false)
     private String title;
     private String description;
+    @Column(nullable = false)
     private String text;
     private Integer views;
-    private Integer comments;
-    private String loginUser;
+    @Column(nullable = false)
     private StatusPost statusPost;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    private Collection<Comment> comments;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
+    private Person person;
+
+
+    public Post() {
+    }
 
     public Integer getId() {
         return id;
@@ -53,14 +72,6 @@ public class Post {
         this.statusPost = statusPost;
     }
 
-    public String getLoginUser() {
-        return loginUser;
-    }
-
-    public void setLoginUser(String loginUser) {
-        this.loginUser = loginUser;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,19 +100,27 @@ public class Post {
                 '}';
     }
 
-    public Integer getComments() {
-        return comments;
-    }
-
-    public void setComments(Integer comments) {
-        this.comments = comments;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Collection<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Collection<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

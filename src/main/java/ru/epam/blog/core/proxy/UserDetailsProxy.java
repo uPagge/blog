@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.epam.blog.core.domain.Person;
-import ru.epam.blog.core.domain.PersonGroup;
+import ru.epam.blog.core.domain.enums.PersonGroup;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

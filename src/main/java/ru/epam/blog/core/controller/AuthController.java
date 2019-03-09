@@ -1,10 +1,12 @@
 package ru.epam.blog.core.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class AuthController {
 
+    public static final Logger log = Logger.getLogger(AuthController.class);
+
     private final AuthenticationManager authenticationManager;
     private final PersonService personService;
 
@@ -36,9 +40,13 @@ public class AuthController {
         String password = request.getParameter("password");
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
-        if (authenticationManager.authenticate(authentication).isAuthenticated()) {
-            return ResponseEntityGson.getJson(TokenAuthenticationService.addAuthentication(username), HttpStatus.OK);
-        } else {
+        try {
+            if (authenticationManager.authenticate(authentication).isAuthenticated()) {
+                return ResponseEntityGson.getJson(TokenAuthenticationService.addAuthentication(username), HttpStatus.OK);
+            } else {
+                return ResponseEntityGson.getJson(new AuthorizationException(), HttpStatus.BAD_REQUEST);
+            }
+        } catch (AuthenticationException e) {
             return ResponseEntityGson.getJson(new AuthorizationException(), HttpStatus.BAD_REQUEST);
         }
     }

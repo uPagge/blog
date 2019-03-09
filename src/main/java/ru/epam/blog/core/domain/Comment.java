@@ -1,11 +1,37 @@
 package ru.epam.blog.core.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Comment {
 
+    @Id
+    @GeneratedValue
     private Integer id;
-    private Integer idPost;
-    private Integer idPerson;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "author_id")
+    private Person author;
+
+    @Column(nullable = false)
     private String message;
+    @Column(nullable = false)
+    private Integer data;
+
+    public Comment() {
+
+    }
+
+    public Comment(Post post, Person author, String message, Integer data) {
+        this.post = post;
+        this.author = author;
+        this.message = message;
+        this.data = data;
+    }
 
     public Integer getId() {
         return id;
@@ -15,20 +41,20 @@ public class Comment {
         this.id = id;
     }
 
-    public Integer getIdPost() {
-        return idPost;
+    public Post getPost() {
+        return post;
     }
 
-    public void setIdPost(Integer idPost) {
-        this.idPost = idPost;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public Integer getIdPerson() {
-        return idPerson;
+    public Person getAuthor() {
+        return author;
     }
 
-    public void setIdPerson(Integer idPerson) {
-        this.idPerson = idPerson;
+    public void setAuthor(Person author) {
+        this.author = author;
     }
 
     public String getMessage() {
@@ -37,5 +63,13 @@ public class Comment {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Integer getData() {
+        return data;
+    }
+
+    public void setData(Integer data) {
+        this.data = data;
     }
 }
