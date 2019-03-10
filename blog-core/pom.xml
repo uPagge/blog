@@ -6,7 +6,11 @@
 
     <groupId>ru.epam.blog</groupId>
     <artifactId>blog-core</artifactId>
+<<<<<<< HEAD
     <version>1.0.0.RELEASE</version>
+=======
+    <version>0.0.1-SNAPSHOT</version>
+>>>>>>> Навел порядок в POMs
     <packaging>jar</packaging>
 
     <build>
