@@ -18,6 +18,13 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <blog.core.ver>0.0.1-SNAPSHOT</blog.core.ver>
+        <jjwt.ver>0.9.1</jjwt.ver>
+        <log4j.ver>1.2.17</log4j.ver>
+        <gson.ver>2.8.5</gson.ver>
+        <hibernate.ver>5.4.1.Final</hibernate.ver>
+        <jaxb.api.ver>2.3.1</jaxb.api.ver>
+        <dozer.ver>5.5.1</dozer.ver>
     </properties>
 
     <dependencies>
@@ -25,7 +32,7 @@
         <dependency>
             <groupId>ru.epam.blog</groupId>
             <artifactId>blog-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${blog.core.ver}</version>
         </dependency>
 
         <dependency>
@@ -64,38 +71,38 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <version>${jjwt.ver}</version>
         </dependency>
 
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>${log4j.ver}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.5</version>
+            <version>${gson.ver}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.1.Final</version>
+            <version>${hibernate.ver}</version>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.4.1.Final</version>
+            <version>${hibernate.ver}</version>
         </dependency>
 
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <version>${jaxb.api.ver}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/postgresql/postgresql -->
@@ -109,7 +116,7 @@
         <dependency>
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer</artifactId>
-            <version>5.5.1</version>
+            <version>${dozer.ver}</version>
         </dependency>
 
     </dependencies>
@@ -122,6 +129,14 @@
             </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <name>Struchkov Mark</name>
+            <email>upagge@mail.ru</email>
+            <organization>SADTECH</organization>
+        </developer>
+    </developers>
 
 
 </project>

@@ -7,6 +7,8 @@
     <groupId>ru.epam.blog</groupId>
     <artifactId>blog-core</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <build>
         <plugins>
             <plugin>
@@ -19,25 +21,39 @@
             </plugin>
         </plugins>
     </build>
-    <packaging>jar</packaging>
+
+    <properties>
+        <java.pers.api.ver>2.2</java.pers.api.ver>
+        <spring.security.core.ver>5.1.4.RELEASE</spring.security.core.ver>
+        <validation.api.ver>2.0.1.Final</validation.api.ver>
+    </properties>
+
 
     <dependencies>
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
-            <version>2.2</version>
+            <version>${java.pers.api.ver}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.1.4.RELEASE</version>
+            <version>${spring.security.core.ver}</version>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
+            <version>${validation.api.ver}</version>
         </dependency>
     </dependencies>
+
+    <developers>
+        <developer>
+            <name>Struchkov Mark</name>
+            <email>upagge@mail.ru</email>
+            <organization>SADTECH</organization>
+        </developer>
+    </developers>
 
 
 </project>
