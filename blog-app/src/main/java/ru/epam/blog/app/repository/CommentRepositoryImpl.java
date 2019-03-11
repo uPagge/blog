@@ -3,7 +3,7 @@ package ru.epam.blog.app.repository;
 import org.springframework.stereotype.Service;
 import ru.epam.blog.app.repository.jpa.CommentRepositoryJpa;
 import ru.epam.blog.core.entity.Comment;
-import ru.epam.blog.core.perository.CommentRepository;
+import ru.epam.blog.core.repository.CommentRepository;
 
 import java.util.Collection;
 

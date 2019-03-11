@@ -7,7 +7,7 @@ import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exce.AccessException;
 import ru.epam.blog.core.exce.InvalidBodyException;
-import ru.epam.blog.core.perository.PostRepository;
+import ru.epam.blog.core.repository.PostRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +55,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void view(Post post, Person person) throws AccessException {
-        if (person.getPersonGroups().contains(PersonGroup.ADMIN) || person.getLogin().equals(post.getPerson().getLogin()) || post.getStatusPost().equals(StatusPost.PUBLISHED)) {
+    public void view(Post post) throws AccessException {
+        Person personAuth = authService.getPersonAuth();
+        if (post.getStatusPost().equals(StatusPost.PUBLISHED) ||
+                (personAuth != null &&
+                        (
+                                personAuth.getPersonGroups().contains(PersonGroup.ADMIN) || post.getPerson().getId().equals(personAuth.getId())
+                        )
+                )
+        ) {
             post.setViews(post.getViews() + 1);
             postRepository.save(post);
         } else {

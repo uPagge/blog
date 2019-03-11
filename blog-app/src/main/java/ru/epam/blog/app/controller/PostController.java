@@ -4,6 +4,7 @@ import org.dozer.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.epam.blog.app.utils.ResponseEntityGson;
 import ru.epam.blog.core.entity.Post;
@@ -12,14 +13,15 @@ import ru.epam.blog.core.exce.AccessException;
 import ru.epam.blog.core.exce.InvalidBodyException;
 import ru.epam.blog.core.pojo.dto.PostDTO;
 import ru.epam.blog.core.pojo.vo.post.PostVO;
-import ru.epam.blog.core.service.PostService;
 import ru.epam.blog.core.service.AuthService;
+import ru.epam.blog.core.service.PostService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/post")
+@PreAuthorize("permitAll()")
 public class PostController {
 
     private final PostService postService;
@@ -43,11 +45,11 @@ public class PostController {
         return ResponseEntityGson.getJson(postsVO, HttpStatus.OK);
     }
 
-    @GetMapping("{postId}")
+    @GetMapping("/{postId}")
     public ResponseEntity getPostInfo(@PathVariable Integer postId) {
         Post post = postService.getById(postId);
         try {
-            postService.view(post, authService.getPersonAuth());
+            postService.view(post);
             PostVO postVO = new PostVO();
             mapper.map(post, postVO);
             return ResponseEntityGson.getJson(postVO, HttpStatus.OK);

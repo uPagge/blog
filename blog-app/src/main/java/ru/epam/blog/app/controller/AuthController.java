@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import ru.epam.blog.app.utils.ResponseEntityGson;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@PreAuthorize("permitAll()")
 public class AuthController {
 
     public static final Logger log = Logger.getLogger(AuthController.class);

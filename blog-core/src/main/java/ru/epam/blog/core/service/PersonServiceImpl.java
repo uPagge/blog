@@ -8,7 +8,7 @@ import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.exce.ApiException;
 import ru.epam.blog.core.exce.InvalidBodyException;
 import ru.epam.blog.core.exce.LoginIsBusyException;
-import ru.epam.blog.core.perository.PersonRepository;
+import ru.epam.blog.core.repository.PersonRepository;
 
 import java.util.Collections;
 

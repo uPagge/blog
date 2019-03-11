@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.epam.blog.app.repository.jpa.PostRepositoryJpa;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.StatusPost;
-import ru.epam.blog.core.perository.PostRepository;
+import ru.epam.blog.core.repository.PostRepository;
 
 import java.util.Collection;
 

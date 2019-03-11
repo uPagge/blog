@@ -18,6 +18,6 @@ public interface PostService {
 
     Post getById(Integer idPost);
 
-    void view(Post post, Person person) throws AccessException;
+    void view(Post post) throws AccessException;
 
 }

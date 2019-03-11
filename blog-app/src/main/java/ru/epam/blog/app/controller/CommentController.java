@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1")
-@PreAuthorize("hasAnyAuthority('USER')")
+@PreAuthorize("permitAll()")
 public class CommentController {
 
     private final CommentService commentService;
@@ -38,6 +38,7 @@ public class CommentController {
     }
 
     @PostMapping("post/{postId}/comment/add")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<String> addNewComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer postId) {
         Comment comment = new Comment();
         mapper.map(commentDTO, comment);
@@ -67,6 +68,7 @@ public class CommentController {
     }
 
     @DeleteMapping("comment/{commentId}/delete")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> deleteComment(@PathVariable Integer commentId) {
         try {
             commentService.delete(commentId);

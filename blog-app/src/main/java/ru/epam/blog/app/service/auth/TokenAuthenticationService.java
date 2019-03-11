@@ -2,17 +2,19 @@ package ru.epam.blog.app.service.auth;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.epam.blog.app.proxy.UserDetailsProxy;
 import ru.epam.blog.core.entity.Person;
-import ru.epam.blog.core.exce.AuthorizationException;
 import ru.epam.blog.core.service.AuthService;
 import ru.epam.blog.core.service.PersonService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -38,22 +40,25 @@ public class TokenAuthenticationService implements AuthService {
                 .signWith(SignatureAlgorithm.HS512, SECRET).compact();
     }
 
-    public Authentication getAuthentication(HttpServletRequest request) throws AuthorizationException {
+    public Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
         if (token != null) {
             String user = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody().getSubject();
             if (user != null && personService.check(user)) {
                 return new UsernamePasswordAuthenticationToken(user, null, UserDetailsProxy.getProxy(personService.getByLogin(user)).getAuthorities());
-            } else {
-                throw new AuthorizationException();
             }
         }
         return null;
+//        return new UsernamePasswordAuthenticationToken("anonymousUser", null, Collections.singleton(new SimpleGrantedAuthority("ANONYMOUS")));
     }
 
     public Person getPersonAuth() {
-        String login = SecurityContextHolder.getContext().getAuthentication().getName();
-        return personService.getByLogin(login);
+        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+            String login = SecurityContextHolder.getContext().getAuthentication().getName();
+            return personService.getByLogin(login);
+        } else {
+            return null;
+        }
     }
 
 }

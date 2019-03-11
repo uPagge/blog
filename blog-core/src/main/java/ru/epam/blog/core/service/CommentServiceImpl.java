@@ -7,7 +7,7 @@ import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exce.AccessException;
-import ru.epam.blog.core.perository.CommentRepository;
+import ru.epam.blog.core.repository.CommentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setPost(post);
         comment.setAuthor(authService.getPersonAuth());
         comment.setData(0);
-        if (post.getStatusPost().equals(StatusPost.PUBLISHED) || authService.getPersonAuth().getPersonGroups().equals(PersonGroup.ADMIN)) {
+        if (post.getStatusPost().equals(StatusPost.PUBLISHED) || authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
             return commentRepository.save(comment);
         } else {
             throw new AccessException();

@@ -30,7 +30,7 @@ public class PersonController {
         Person personAuth = authService.getPersonAuth();
         PersonVO personVO = new PersonVO();
         mapper.map(personAuth, personVO);
-        return ResponseEntityGson.getJson(authService.getPersonAuth(), HttpStatus.OK);
+        return ResponseEntityGson.getJson(personVO, HttpStatus.OK);
     }
 
 }
