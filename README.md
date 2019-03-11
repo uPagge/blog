@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Getting Started
 
 ### Guides
@@ -21,4 +22,7 @@ The following guides illustrates how to use certain features concretely:
 =======
 # spam-blog
 >>>>>>> Initial commit
+=======
+# spam-blog
+>>>>>>> Revert "Revert "Initial commit""
 
