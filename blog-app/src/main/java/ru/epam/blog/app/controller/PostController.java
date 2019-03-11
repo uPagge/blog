@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import org.springframework.security.core.context.SecurityContextHolder;
 >>>>>>> Посты видят и неавторизованные
+=======
+>>>>>>> Release 1.0.0
 import org.springframework.web.bind.annotation.*;
 import ru.epam.blog.app.utils.ResponseEntityGson;
 import ru.epam.blog.core.entity.Post;
@@ -25,13 +28,17 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("api/v1/post")
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 @PreAuthorize("permitAll()")
 >>>>>>> Посты видят и неавторизованные
+=======
+>>>>>>> Release 1.0.0
 public class PostController {
 
     private final PostService postService;
     private final Mapper mapper;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     public PostController(PostService postService, Mapper mapper) {
@@ -39,12 +46,17 @@ public class PostController {
         this.mapper = mapper;
 =======
     private final AuthService authService;
+=======
+>>>>>>> Release 1.0.0
 
-    public PostController(PostService postService, Mapper mapper, AuthService authService) {
+    public PostController(PostService postService, Mapper mapper) {
         this.postService = postService;
         this.mapper = mapper;
+<<<<<<< HEAD
         this.authService = authService;
 >>>>>>> Посты видят и неавторизованные
+=======
+>>>>>>> Release 1.0.0
     }
 
     @GetMapping

@@ -14,19 +14,27 @@
     <groupId>ru.epam.blog</groupId>
     <artifactId>blog-app</artifactId>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <version>1.0.0.RELEASE</version>
 =======
     <version>0.0.1-SNAPSHOT</version>
 >>>>>>> Навел порядок в POMs
+=======
+    <version>1.0.0.RELEASE</version>
+>>>>>>> Release 1.0.0
     <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <blog.core.ver>1.0.0.RELEASE</blog.core.ver>
 =======
         <blog.core.ver>0.0.1-SNAPSHOT</blog.core.ver>
 >>>>>>> Навел порядок в POMs
+=======
+        <blog.core.ver>1.0.0.RELEASE</blog.core.ver>
+>>>>>>> Release 1.0.0
         <jjwt.ver>0.9.1</jjwt.ver>
         <log4j.ver>1.2.17</log4j.ver>
         <gson.ver>2.8.5</gson.ver>
