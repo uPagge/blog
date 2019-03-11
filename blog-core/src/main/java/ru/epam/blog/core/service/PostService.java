@@ -17,7 +17,16 @@ public interface PostService {
     List<Post> getAllByStatus(StatusPost statusPost);
 
     Post getById(Integer idPost);
+<<<<<<< HEAD:blog-core/src/main/java/ru/epam/blog/core/service/PostService.java
 
     void view(Post post) throws AccessException;
 
+=======
+<<<<<<< HEAD:src/main/java/ru/epam/blog/core/service/PostService.java
+=======
+
+    void view(Post post) throws AccessException;
+
+>>>>>>> Посты видят и неавторизованные:blog-core/src/main/java/ru/epam/blog/core/service/PostService.java
+>>>>>>> Посты видят и неавторизованные:src/main/java/ru/epam/blog/core/service/PostService.java
 }

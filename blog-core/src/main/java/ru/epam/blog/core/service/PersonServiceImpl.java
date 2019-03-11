@@ -8,7 +8,15 @@ import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.exce.ApiException;
 import ru.epam.blog.core.exce.InvalidBodyException;
 import ru.epam.blog.core.exce.LoginIsBusyException;
+<<<<<<< HEAD:blog-core/src/main/java/ru/epam/blog/core/service/PersonServiceImpl.java
 import ru.epam.blog.core.repository.PersonRepository;
+=======
+<<<<<<< HEAD:src/main/java/ru/epam/blog/core/service/PersonServiceImpl.java
+import ru.epam.blog.core.perository.jpa.PersonRepositoryJpa;
+=======
+import ru.epam.blog.core.repository.PersonRepository;
+>>>>>>> Посты видят и неавторизованные:blog-core/src/main/java/ru/epam/blog/core/service/PersonServiceImpl.java
+>>>>>>> Посты видят и неавторизованные:src/main/java/ru/epam/blog/core/service/PersonServiceImpl.java
 
 import java.util.Collections;
 

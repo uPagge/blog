@@ -24,6 +24,7 @@ import ru.epam.blog.app.utils.ResponseEntityGson;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
+@PreAuthorize("permitAll()")
 public class AuthController {
 
     public static final Logger log = Logger.getLogger(AuthController.class);
