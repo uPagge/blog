@@ -9,7 +9,7 @@ public interface PostRepository {
 
     Post save(Post post);
 
-    boolean remove(Integer id);
+    void delete(Integer id);
 
     Collection<Post> getAllByStatus(StatusPost statusPost);
 

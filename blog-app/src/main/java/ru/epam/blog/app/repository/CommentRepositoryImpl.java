@@ -35,4 +35,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     public Comment getById(Integer commentId) {
         return commentRepositoryJpa.getOne(commentId);
     }
+
+    @Override
+    public void delete(Integer id) {
+        commentRepositoryJpa.deleteById(id);
+    }
 }

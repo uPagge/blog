@@ -12,7 +12,6 @@ import ru.epam.blog.core.exce.AccessException;
 import ru.epam.blog.core.exce.InvalidBodyException;
 import ru.epam.blog.core.pojo.dto.PostDTO;
 import ru.epam.blog.core.pojo.vo.post.PostVO;
-import ru.epam.blog.core.service.AuthService;
 import ru.epam.blog.core.service.PostService;
 
 import java.util.List;
@@ -39,6 +38,11 @@ public class PostController {
             return postVO;
         }).collect(Collectors.toList());
         return ResponseEntityGson.getJson(postsVO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{postId}/delete")
+    public void delete(@PathVariable Integer postId) {
+        postService.remove(postId);
     }
 
     @GetMapping("/{postId}")

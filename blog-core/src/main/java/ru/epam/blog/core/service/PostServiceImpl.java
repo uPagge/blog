@@ -40,8 +40,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean remove(Integer id) {
-        return false;
+    public void remove(Integer id) {
+        Post post = postRepository.getById(id);
+        Person personAuth = authService.getPersonAuth();
+        if (post.getPerson().getId().equals(personAuth.getId()) ||
+                personAuth.getPersonGroups().contains(PersonGroup.ADMIN)) {
+            postRepository.delete(id);
+        }
     }
 
     @Override

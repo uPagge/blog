@@ -23,9 +23,8 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public boolean remove(Integer id) {
-        postRepositoryJpa.delete(postRepositoryJpa.getOne(id));
-        return true;
+    public void delete(Integer id) {
+        postRepositoryJpa.deleteById(id);
     }
 
     @Override

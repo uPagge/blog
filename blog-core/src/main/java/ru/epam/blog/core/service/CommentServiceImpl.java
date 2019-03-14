@@ -61,6 +61,7 @@ public class CommentServiceImpl implements CommentService {
         Person personAuth = authService.getPersonAuth();
         if (comment.getAuthor().getId().equals(personAuth.getId()) ||
                 authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
+            commentRepository.delete(commentId);
             return true;
         } else {
             throw new AccessException();

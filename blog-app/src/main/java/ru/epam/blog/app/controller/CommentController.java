@@ -67,7 +67,7 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("comment/{commentId}/delete")
+    @DeleteMapping("comment/{commentId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> deleteComment(@PathVariable Integer commentId) {
         try {

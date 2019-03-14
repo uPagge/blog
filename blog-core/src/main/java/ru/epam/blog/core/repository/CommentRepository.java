@@ -13,4 +13,7 @@ public interface CommentRepository {
     Collection<Comment> getAllByIdPost(Integer idPost);
 
     Comment getById(Integer idCreate);
+
+    void delete(Integer id);
+
 }
