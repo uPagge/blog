@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,13 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.epam.blog.core.pojo.dto.person.RegistrationPersonDTO;
+import ru.epam.blog.app.service.auth.TokenAuthenticationService;
+import ru.epam.blog.app.utils.ResponseEntityGson;
 import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.exce.ApiException;
 import ru.epam.blog.core.exce.AuthorizationException;
+import ru.epam.blog.core.pojo.dto.person.RegistrationPersonDTO;
 import ru.epam.blog.core.service.PersonService;
-import ru.epam.blog.app.service.auth.TokenAuthenticationService;
-import ru.epam.blog.app.utils.ResponseEntityGson;
 
 import javax.servlet.http.HttpServletRequest;
 
