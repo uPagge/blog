@@ -1,13 +1,13 @@
-package ru.epam.blog.app.repository;
+package ru.epam.blog.model.repository;
 
-import org.springframework.stereotype.Service;
-import ru.epam.blog.app.repository.jpa.CommentRepositoryJpa;
+import org.springframework.stereotype.Repository;
 import ru.epam.blog.core.entity.Comment;
 import ru.epam.blog.core.repository.CommentRepository;
+import ru.epam.blog.model.repository.jpa.CommentRepositoryJpa;
 
 import java.util.Collection;
 
-@Service
+@Repository
 public class CommentRepositoryImpl implements CommentRepository {
 
     private final CommentRepositoryJpa commentRepositoryJpa;
@@ -16,23 +16,23 @@ public class CommentRepositoryImpl implements CommentRepository {
         this.commentRepositoryJpa = commentRepositoryJpa;
     }
 
-    @Override
     public Comment save(Comment comment) {
         return commentRepositoryJpa.save(comment);
     }
 
-    @Override
     public Collection<Comment> getAll() {
         return commentRepositoryJpa.findAll();
     }
 
-    @Override
     public Collection<Comment> getAllByIdPost(Integer postId) {
-        return commentRepositoryJpa.findAllByPostId(postId);
+        return commentRepositoryJpa.findByPostId(postId);
     }
 
-    @Override
     public Comment getById(Integer commentId) {
         return commentRepositoryJpa.getOne(commentId);
+    }
+
+    public void delete(Integer id) {
+        commentRepositoryJpa.deleteById(id);
     }
 }

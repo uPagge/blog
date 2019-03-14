@@ -1,6 +1,5 @@
 package ru.epam.blog.core.service;
 
-import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exce.AccessException;
@@ -12,7 +11,7 @@ public interface PostService {
 
     Post created(Post post) throws InvalidBodyException;
 
-    boolean remove(Integer id);
+    void remove(Integer id);
 
     List<Post> getAllByStatus(StatusPost statusPost);
 

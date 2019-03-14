@@ -3,23 +3,25 @@ package ru.epam.blog.core.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "comment")
 public class Comment {
 
     @Id
-    @GeneratedValue
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private Person author;
 
-    @Column(nullable = false)
+    @Column(name = "message", nullable = false)
     private String message;
-    @Column(nullable = false)
+    @Column(name = "data", nullable = false)
     private Integer data;
 
     public Comment() {

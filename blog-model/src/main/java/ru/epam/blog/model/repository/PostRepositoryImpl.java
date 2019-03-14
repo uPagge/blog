@@ -1,14 +1,14 @@
-package ru.epam.blog.app.repository;
+package ru.epam.blog.model.repository;
 
-import org.springframework.stereotype.Service;
-import ru.epam.blog.app.repository.jpa.PostRepositoryJpa;
+import org.springframework.stereotype.Repository;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.repository.PostRepository;
+import ru.epam.blog.model.repository.jpa.PostRepositoryJpa;
 
 import java.util.Collection;
 
-@Service
+@Repository
 public class PostRepositoryImpl implements PostRepository {
 
     private final PostRepositoryJpa postRepositoryJpa;
@@ -17,23 +17,18 @@ public class PostRepositoryImpl implements PostRepository {
         this.postRepositoryJpa = postRepositoryJpa;
     }
 
-    @Override
     public Post save(Post post) {
         return postRepositoryJpa.saveAndFlush(post);
     }
 
-    @Override
-    public boolean remove(Integer id) {
-        postRepositoryJpa.delete(postRepositoryJpa.getOne(id));
-        return true;
+    public void delete(Integer id) {
+        postRepositoryJpa.deleteById(id);
     }
 
-    @Override
     public Collection<Post> getAllByStatus(StatusPost statusPost) {
-        return postRepositoryJpa.findAllByStatusPost(statusPost);
+        return postRepositoryJpa.findByStatusPost(statusPost);
     }
 
-    @Override
     public Post getById(Integer postId) {
         return postRepositoryJpa.getOne(postId);
     }

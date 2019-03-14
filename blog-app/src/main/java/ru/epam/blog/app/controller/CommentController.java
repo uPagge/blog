@@ -26,13 +26,11 @@ import java.util.stream.Collectors;
 public class CommentController {
 
     private final CommentService commentService;
-    private final PersonService personService;
     private final PostService postService;
     private final Mapper mapper;
 
-    public CommentController(CommentService commentService, PersonService personService, PostService postService, Mapper mapper) {
+    public CommentController(CommentService commentService, PostService postService, Mapper mapper) {
         this.commentService = commentService;
-        this.personService = personService;
         this.postService = postService;
         this.mapper = mapper;
     }
@@ -67,7 +65,7 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("comment/{commentId}/delete")
+    @DeleteMapping("comment/{commentId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> deleteComment(@PathVariable Integer commentId) {
         try {

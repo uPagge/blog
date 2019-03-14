@@ -6,8 +6,7 @@
 
     <groupId>ru.epam.blog</groupId>
     <artifactId>blog-core</artifactId>
-    <version>1.0.0.RELEASE</version>
-    <packaging>jar</packaging>
+    <version>1.1.0-RELEASE</version>
 
     <build>
         <plugins>

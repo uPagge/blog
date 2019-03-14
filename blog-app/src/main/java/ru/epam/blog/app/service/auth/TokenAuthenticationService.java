@@ -2,10 +2,8 @@ package ru.epam.blog.app.service.auth;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.epam.blog.app.proxy.UserDetailsProxy;
@@ -14,7 +12,6 @@ import ru.epam.blog.core.service.AuthService;
 import ru.epam.blog.core.service.PersonService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -49,7 +46,6 @@ public class TokenAuthenticationService implements AuthService {
             }
         }
         return null;
-//        return new UsernamePasswordAuthenticationToken("anonymousUser", null, Collections.singleton(new SimpleGrantedAuthority("ANONYMOUS")));
     }
 
     public Person getPersonAuth() {
