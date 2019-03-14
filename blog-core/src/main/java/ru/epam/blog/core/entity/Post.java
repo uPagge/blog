@@ -7,10 +7,12 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "post")
 public class Post {
 
     @Id
-    @GeneratedValue
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
     private String title;
@@ -18,13 +20,13 @@ public class Post {
     @Column(nullable = false)
     private String text;
     private Integer views;
-    @Column(nullable = false)
+    @JoinColumn(nullable = false)
     private StatusPost statusPost;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private Person person;
 

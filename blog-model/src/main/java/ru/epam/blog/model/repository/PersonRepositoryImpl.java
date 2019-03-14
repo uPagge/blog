@@ -1,11 +1,11 @@
-package ru.epam.blog.app.repository;
+package ru.epam.blog.model.repository;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.repository.PersonRepository;
-import ru.epam.blog.app.repository.jpa.PersonRepositoryJpa;
+import ru.epam.blog.model.repository.jpa.PersonRepositoryJpa;
 
-@Service
+@Repository
 public class PersonRepositoryImpl implements PersonRepository {
 
     private final PersonRepositoryJpa personRepositoryJpa;
@@ -14,12 +14,10 @@ public class PersonRepositoryImpl implements PersonRepository {
         this.personRepositoryJpa = personRepositoryJpa;
     }
 
-    @Override
     public Person add(Person person) {
         return personRepositoryJpa.saveAndFlush(person);
     }
 
-    @Override
     public Person getByLogin(String login) {
         return personRepositoryJpa.findByLogin(login);
     }

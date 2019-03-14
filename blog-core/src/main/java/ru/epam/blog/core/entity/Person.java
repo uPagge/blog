@@ -7,17 +7,20 @@ import java.util.Collection;
 import java.util.Set;
 
 @Entity
+@Table(name = "person")
 public class Person {
 
     @Id
-    @GeneratedValue
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true, nullable = false)
+    @Column(name = "login", unique = true, nullable = false)
     private String login;
-    @Column(nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
@@ -27,8 +30,9 @@ public class Person {
     private Collection<Post> posts;
 
     @ElementCollection(targetClass = PersonGroup.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "person_group", joinColumns = @JoinColumn(name = "person_id", nullable = false))
+    @CollectionTable(name = "person_group", joinColumns = {@JoinColumn(name = "person_id", nullable = false)})
     @Enumerated(EnumType.STRING)
+    @Column(name = "person_group")
     private Set<PersonGroup> personGroups;
 
     public Person(String login, String firstName, String lastName, String password) {

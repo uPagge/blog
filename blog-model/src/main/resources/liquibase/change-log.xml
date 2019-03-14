@@ -1,0 +1,110 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="Struchkov Mark" runAlways="true">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="comment"/>
+            <tableExists tableName="person"/>
+            <tableExists tableName="person_group"/>
+            <tableExists tableName="post"/>
+        </preConditions>
+        <dropTable tableName="comment"/>
+        <dropTable tableName="person" cascadeConstraints="true"/>
+        <dropTable tableName="person_group" cascadeConstraints="true"/>
+        <dropTable tableName="post"/>
+    </changeSet>
+
+    <changeSet id="2" author="Struchkov Mark" runAlways="true">
+
+        <createTable tableName="person">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(20)"/>
+            <column name="login" type="varchar(50)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="text"/>
+        </createTable>
+
+        <createTable tableName="person_group">
+            <column name="person_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)"/>
+            </column>
+            <column name="person_group" type="varchar(20)"/>
+        </createTable>
+        <addPrimaryKey tableName="person_group" columnNames="person_id, person_group"/>
+
+        <createTable tableName="post">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="status_post" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="views" type="integer"/>
+            <column name="author_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)" initiallyDeferred="true" deleteCascade="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="comment">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="data" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)"/>
+            </column>
+            <column name="post_id" type="integer">
+                <constraints foreignKeyName="fk_post_id" references="post(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="Struchkov Mark" runAlways="true">
+        <insert tableName="person">
+            <column name="id" value="0"/>
+            <column name="login" value="root"/>
+            <column name="first_name" value="Mark"/>
+            <column name="password" value="$2a$10$H2tZ1hVS.m8PBfqQOWP5LOH1NYAuJhxu5YEyMSZmST32QUyaTFuDi"/>
+        </insert>
+
+        <insert tableName="person_group">
+            <column name="person_id" value="0"/>
+            <column name="person_group" value="ADMIN"/>
+        </insert>
+        <insert tableName="person_group">
+            <column name="person_id" value="0"/>
+            <column name="person_group" value="USER"/>
+        </insert>
+
+        <insert tableName="post">
+            <column name="title" value="Британский парламент одобрил отсрочку Brexit"/>
+            <column name="description"
+                    value="Британские парламентарии поддержали продление срока Brexit с 29 марта на более позднюю дату."/>
+            <column name="status_post" value="published"/>
+            <column name="text" value="Британские парламентарии поддержали продление срока Brexit с 29 марта на более позднюю дату. За перенос высказались 412 депутатов, против — 202. Согласовать отсрочку теперь предстоит 27 странам — членам ЕС. Предложение правительства перенести срок сформулировано таким образом, что если до 20 марта парламент проголосует за соглашение с ЕС, которое уже дважды было отвергнуто подавляющим большинством, то речь будет идти об отсрочке Brexit до 30 июня. Если же парламент не поддержит соглашение, то потребуется более длительное продление срока Brexit, которое повлечет за собой участие Британии в европейских выборах в мае. Накануне парламент высказался против выхода из ЕС без соглашения при любых обстоятельствах. Однако если Британия и ЕС не ратифицируют соглашение, вариантом по умолчанию все равно остается выход без соглашения."/>
+            <column name="author_id" value="0"/>
+            <column name="views" value="0"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

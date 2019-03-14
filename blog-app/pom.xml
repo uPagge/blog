@@ -14,35 +14,17 @@
     <groupId>ru.epam.blog</groupId>
     <artifactId>blog-app</artifactId>
     <version>1.1.0.SNAPSHOT</version>
-    <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
-        <blog.core.ver>1.1.0.SNAPSHOT</blog.core.ver>
         <jjwt.ver>0.9.1</jjwt.ver>
         <log4j.ver>1.2.17</log4j.ver>
         <gson.ver>2.8.5</gson.ver>
-        <hibernate.ver>5.4.1.Final</hibernate.ver>
         <jaxb.api.ver>2.3.1</jaxb.api.ver>
         <dozer.ver>5.5.1</dozer.ver>
     </properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>ru.epam.blog</groupId>
-            <artifactId>blog-core</artifactId>
-            <version>${blog.core.ver}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -86,19 +68,6 @@
             <version>${gson.ver}</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.ver}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate.ver}</version>
-        </dependency>
-
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -108,15 +77,21 @@
         <!-- https://mvnrepository.com/artifact/postgresql/postgresql -->
 
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
             <groupId>net.sf.dozer</groupId>
             <artifactId>dozer</artifactId>
             <version>${dozer.ver}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.epam.blog</groupId>
+            <artifactId>blog-model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.epam.blog</groupId>
+            <artifactId>blog-core</artifactId>
+            <version>1.1.0.SNAPSHOT</version>
         </dependency>
 
     </dependencies>

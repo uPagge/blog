@@ -1,17 +1,16 @@
 spring:
-  mandatory-file-encoding: UTF-8
   datasource:
     url: jdbc:postgresql://localhost:5432/blog
     username: upagge
+    driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQL82Dialect
-        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
-        temp:
-          use_jdbc_metadata_defaults: false
-server:
-  port: 8080
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  liquibase:
+    change-log: classpath:liquibase/change-log.xml
