@@ -30,10 +30,6 @@ public class Post {
     @JoinColumn(name = "author_id")
     private Person person;
 
-
-    public Post() {
-    }
-
     public Integer getId() {
         return id;
     }
