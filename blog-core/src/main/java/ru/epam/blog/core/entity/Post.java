@@ -21,6 +21,7 @@ public class Post {
     private String text;
     private Integer views;
     @JoinColumn(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatusPost statusPost;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
