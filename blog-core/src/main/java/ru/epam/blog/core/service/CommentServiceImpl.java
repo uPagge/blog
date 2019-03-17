@@ -6,7 +6,7 @@ import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
-import ru.epam.blog.core.exce.AccessException;
+import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.repository.CommentRepository;
 
 import java.util.ArrayList;
@@ -25,15 +25,18 @@ public class CommentServiceImpl implements CommentService {
         this.authService = authService;
     }
 
-
     @Override
     public Comment add(Comment comment, Integer postId) throws AccessException {
         Post post = postService.getById(postId);
-        comment.setPost(post);
-        comment.setAuthor(authService.getPersonAuth());
-        comment.setData(0);
-        if (post.getStatusPost().equals(StatusPost.PUBLISHED) || authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
-            return commentRepository.save(comment);
+        if (post != null) {
+            if (statusPostValid(post) || userGroupAccess()) {
+                comment.setPost(post);
+                comment.setAuthor(authService.getPersonAuth());
+                comment.setData(0);
+                return commentRepository.save(comment);
+            } else {
+                throw new AccessException();
+            }
         } else {
             throw new AccessException();
         }
@@ -45,11 +48,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getByIdPost(Integer idPost) throws AccessException {
+    public List<Comment> getAllByIdPost(Integer idPost) throws AccessException {
         Post post = postService.getById(idPost);
-        if (post.getStatusPost().equals(StatusPost.PUBLISHED) ||
-                authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
-            return new ArrayList<>(commentRepository.getAllByIdPost(idPost));
+        if (post != null) {
+            if (statusPostValid(post) || userGroupAccess()) {
+                return new ArrayList<>(commentRepository.getAllByIdPost(idPost));
+            } else {
+                throw new AccessException();
+            }
         } else {
             throw new AccessException();
         }
@@ -58,14 +64,29 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean delete(Integer commentId) throws AccessException {
         Comment comment = commentRepository.getById(commentId);
-        Person personAuth = authService.getPersonAuth();
-        if (comment.getAuthor().getId().equals(personAuth.getId()) ||
-                authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
-            commentRepository.delete(commentId);
-            return true;
+        if (comment != null) {
+            Person personAuth = authService.getPersonAuth();
+            if (ownedByUser(comment, personAuth) || userGroupAccess()) {
+                commentRepository.delete(commentId);
+                return true;
+            } else {
+                throw new AccessException();
+            }
         } else {
             throw new AccessException();
         }
+    }
+
+    private boolean ownedByUser(Comment comment, Person person) {
+        return comment.getAuthor().getId().equals(person.getId());
+    }
+
+    private boolean userGroupAccess() {
+        return authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN);
+    }
+
+    private boolean statusPostValid(Post post) {
+        return StatusPost.PUBLISHED.equals(post.getStatusPost());
     }
 
 

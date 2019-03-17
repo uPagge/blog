@@ -5,15 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.epam.blog.app.utils.ResponseEntityGson;
 import ru.epam.blog.core.entity.Comment;
 import ru.epam.blog.core.entity.Post;
-import ru.epam.blog.core.exce.AccessException;
-import ru.epam.blog.core.exce.ApiException;
+import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.pojo.dto.CommentDTO;
 import ru.epam.blog.core.pojo.vo.CommentVO;
 import ru.epam.blog.core.service.CommentService;
-import ru.epam.blog.core.service.PersonService;
 import ru.epam.blog.core.service.PostService;
 
 import java.util.Collection;
@@ -35,44 +32,33 @@ public class CommentController {
         this.mapper = mapper;
     }
 
-    @PostMapping("post/{postId}/comment/add")
+    @PostMapping("post/{postId}/comment")
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<String> addNewComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer postId) {
+    public ResponseEntity<CommentVO> addNewComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer postId) throws AccessException {
         Comment comment = new Comment();
         mapper.map(commentDTO, comment);
-        try {
-            Comment commentCreate = commentService.add(comment, postId);
-            mapper.map(commentCreate, commentDTO);
-            return ResponseEntityGson.getJson(commentDTO, HttpStatus.CREATED);
-        } catch (ApiException e) {
-            return ResponseEntityGson.getJson(e, HttpStatus.CONFLICT);
-        }
+        Comment commentCreate = commentService.add(comment, postId);
+        CommentVO commentVO = new CommentVO();
+        mapper.map(commentCreate, commentVO);
+        return new ResponseEntity<>(commentVO, HttpStatus.CREATED);
     }
 
     @GetMapping("post/{postId}/comment")
-    public ResponseEntity<String> getAllCommentPost(@PathVariable Integer postId) {
-        try {
-            Post post = postService.getById(postId);
-            Collection<Comment> comments = post.getComments();
-            List<CommentVO> commentVOS = comments.stream().map(comment -> {
-                CommentVO commentVO = new CommentVO();
-                mapper.map(comment, commentVO);
-                return commentVO;
-            }).collect(Collectors.toList());
-            return ResponseEntityGson.getJson(commentVOS, HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntityGson.getJson(e, HttpStatus.LOCKED);
-        }
+    public ResponseEntity<List<CommentVO>> getAllCommentPost(@PathVariable Integer postId) {
+        Post post = postService.getById(postId);
+        Collection<Comment> comments = post.getComments();
+        List<CommentVO> commentVOS = comments.stream().map(comment -> {
+            CommentVO commentVO = new CommentVO();
+            mapper.map(comment, commentVO);
+            return commentVO;
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(commentVOS, HttpStatus.OK);
     }
 
     @DeleteMapping("comment/{commentId}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<String> deleteComment(@PathVariable Integer commentId) {
-        try {
-            commentService.delete(commentId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (AccessException e) {
-            return ResponseEntityGson.getJson(e, HttpStatus.CONFLICT);
-        }
+    public HttpStatus deleteComment(@PathVariable Integer commentId) throws AccessException {
+        commentService.delete(commentId);
+        return HttpStatus.OK;
     }
 }

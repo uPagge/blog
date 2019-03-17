@@ -26,9 +26,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="last_name" type="varchar(20)"/>
-            <column name="login" type="varchar(50)">
+            <column name="username" type="varchar(50)">
                 <constraints unique="true"/>
             </column>
+            <column name="email" type="varchar(100)"><constraints unique="true" nullable="false"/> </column>
             <column name="password" type="text"/>
         </createTable>
 
@@ -67,7 +68,7 @@
             <column name="data" type="integer">
                 <constraints nullable="false"/>
             </column>
-            <column name="message" type="text">
+            <column name="error" type="text">
                 <constraints nullable="false"/>
             </column>
             <column name="author_id" type="integer">
@@ -82,9 +83,10 @@
     <changeSet id="3" author="Struchkov Mark" runAlways="true">
         <insert tableName="person">
             <column name="id" value="0"/>
-            <column name="login" value="root"/>
+            <column name="username" value="root"/>
             <column name="first_name" value="Mark"/>
             <column name="password" value="$2a$10$H2tZ1hVS.m8PBfqQOWP5LOH1NYAuJhxu5YEyMSZmST32QUyaTFuDi"/>
+            <column name="email" value="upagge@mail.ru"/>
         </insert>
 
         <insert tableName="person_group">

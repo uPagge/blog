@@ -21,4 +21,9 @@ public class PersonRepositoryImpl implements PersonRepository {
     public Person getByLogin(String login) {
         return personRepositoryJpa.findByLogin(login);
     }
+
+    @Override
+    public Person getByEmail(String email) {
+        return personRepositoryJpa.findByEmail(email);
+    }
 }

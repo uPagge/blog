@@ -5,11 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.epam.blog.app.utils.ResponseEntityGson;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.StatusPost;
-import ru.epam.blog.core.exce.AccessException;
-import ru.epam.blog.core.exce.InvalidBodyException;
+import ru.epam.blog.core.exception.AccessException;
+import ru.epam.blog.core.exception.InvalidBodyException;
 import ru.epam.blog.core.pojo.dto.PostDTO;
 import ru.epam.blog.core.pojo.vo.post.PostVO;
 import ru.epam.blog.core.service.PostService;
@@ -30,46 +29,39 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getAllPost() {
+    public ResponseEntity<List<PostVO>> getAllPost() {
         List<Post> posts = postService.getAllByStatus(StatusPost.PUBLISHED);
         List<PostVO> postsVO = posts.stream().map(post1 -> {
             PostVO postVO = new PostVO();
             mapper.map(post1, postVO);
             return postVO;
         }).collect(Collectors.toList());
-        return ResponseEntityGson.getJson(postsVO, HttpStatus.OK);
+        return new ResponseEntity<>(postsVO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{postId}/delete")
-    public void delete(@PathVariable Integer postId) {
+    public void delete(@PathVariable Integer postId) throws AccessException {
         postService.remove(postId);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity getPostInfo(@PathVariable Integer postId) {
+    public ResponseEntity<PostVO> getPostInfo(@PathVariable Integer postId) throws AccessException {
         Post post = postService.getById(postId);
-        try {
-            postService.view(post);
-            PostVO postVO = new PostVO();
-            mapper.map(post, postVO);
-            return ResponseEntityGson.getJson(postVO, HttpStatus.OK);
-        } catch (AccessException e) {
-            return ResponseEntityGson.getJson(e, HttpStatus.LOCKED);
-        }
+        postService.view(post);
+        PostVO postVO = new PostVO();
+        mapper.map(post, postVO);
+        return new ResponseEntity<>(postVO, HttpStatus.OK);
     }
 
     @PostMapping("/create")
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<String> create(@RequestBody PostDTO postDTO) {
-        try {
-            Post post = new Post();
-            mapper.map(postDTO, post);
-            Post created = postService.created(post);
-            mapper.map(created, postDTO);
-            return ResponseEntityGson.getJson(postDTO, HttpStatus.CREATED);
-        } catch (InvalidBodyException e) {
-            return ResponseEntityGson.getJson(e, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<PostVO> create(@RequestBody PostDTO postDTO) throws InvalidBodyException {
+        Post post = new Post();
+        mapper.map(postDTO, post);
+        Post created = postService.created(post);
+        PostVO postVO = new PostVO();
+        mapper.map(created, postVO);
+        return new ResponseEntity<>(postVO, HttpStatus.CREATED);
     }
 
 }

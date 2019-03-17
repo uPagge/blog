@@ -1,7 +1,7 @@
 package ru.epam.blog.core.service;
 
 import ru.epam.blog.core.entity.Comment;
-import ru.epam.blog.core.exce.AccessException;
+import ru.epam.blog.core.exception.AccessException;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface CommentService {
 
     List<Comment> getAll();
 
-    List<Comment> getByIdPost(Integer idPost) throws AccessException;
+    List<Comment> getAllByIdPost(Integer idPost) throws AccessException;
 
     boolean delete(Integer commentId) throws AccessException;
 }

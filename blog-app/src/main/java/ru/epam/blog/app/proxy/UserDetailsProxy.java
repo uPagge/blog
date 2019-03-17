@@ -1,5 +1,6 @@
 package ru.epam.blog.app.proxy;
 
+import org.apache.log4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UserDetailsProxy {
+
+    public static final Logger log = Logger.getLogger(UserDetailsService.class);
 
     public static UserDetails getProxy(Person person) {
         InvocationHandler invocationHandler = new MyUserDetails(person);
@@ -44,6 +47,9 @@ public class UserDetailsProxy {
                         break;
                     case USER:
                         roles.add(Role.USER);
+                        break;
+                    default:
+                        log.warn("Такой группы не предусмотрено: " + personGroup.name());
                         break;
                 }
             }

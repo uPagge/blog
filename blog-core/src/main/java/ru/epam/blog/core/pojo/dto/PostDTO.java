@@ -1,9 +1,13 @@
 package ru.epam.blog.core.pojo.dto;
 
+import javax.validation.constraints.NotNull;
+
 public class PostDTO {
 
+    @NotNull
     private String title;
     private String description;
+    @NotNull
     private String text;
 
     public String getTitle() {

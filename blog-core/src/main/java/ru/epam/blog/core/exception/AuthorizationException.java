@@ -1,4 +1,4 @@
-package ru.epam.blog.core.exce;
+package ru.epam.blog.core.exception;
 
 public class AuthorizationException extends ApiException {
 

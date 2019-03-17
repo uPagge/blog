@@ -1,15 +1,18 @@
 package ru.epam.blog.core.pojo.dto.person;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 public class RegistrationPersonDTO {
 
-    @NotNull
+    @NotNull(message = "Отсутствует поле login")
     private String login;
-    @NotNull
+    @NotNull(message = "Отсутствует поле password")
     private String password;
-    @NotNull
+    @NotNull(message = "Отсуствует поле firstName")
     private String firstName;
+    @Email @NotNull(message = "Отсутствует, или не валидно, поле email")
+    private String email;
     private String lastName;
 
     public String getLogin() {
@@ -42,5 +45,13 @@ public class RegistrationPersonDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -5,10 +5,11 @@ import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
-import ru.epam.blog.core.exce.AccessException;
-import ru.epam.blog.core.exce.InvalidBodyException;
+import ru.epam.blog.core.exception.AccessException;
+import ru.epam.blog.core.exception.InvalidBodyException;
 import ru.epam.blog.core.repository.PostRepository;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,26 +27,25 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post created(Post post) throws InvalidBodyException {
         if (validCreated(post)) {
-            post.setPerson(authService.getPersonAuth());
-            post.setStatusPost(StatusPost.PUBLISHED);
-            post.setViews(0);
+            assignDefaultValues(post);
             return postRepository.save(post);
         } else {
             throw new InvalidBodyException();
         }
     }
 
-    private boolean validCreated(Post post) {
-        return (post.getTitle() != null && post.getText() != null && post.getDescription() != null);
-    }
-
     @Override
-    public void remove(Integer id) {
+    public void remove(Integer id) throws AccessException {
         Post post = postRepository.getById(id);
-        Person personAuth = authService.getPersonAuth();
-        if (post.getPerson().getId().equals(personAuth.getId()) ||
-                personAuth.getPersonGroups().contains(PersonGroup.ADMIN)) {
-            postRepository.delete(id);
+        if (post != null) {
+            Person personAuth = authService.getPersonAuth();
+            if (ownedByUser(post, personAuth) || userGroupAccess(personAuth)) {
+                postRepository.delete(id);
+            } else {
+                throw new AccessException();
+            }
+        } else {
+            throw new AccessException();
         }
     }
 
@@ -62,17 +62,29 @@ public class PostServiceImpl implements PostService {
     @Override
     public void view(Post post) throws AccessException {
         Person personAuth = authService.getPersonAuth();
-        if (post.getStatusPost().equals(StatusPost.PUBLISHED) ||
-                (personAuth != null &&
-                        (
-                                personAuth.getPersonGroups().contains(PersonGroup.ADMIN) || post.getPerson().getId().equals(personAuth.getId())
-                        )
-                )
-        ) {
+        if ((StatusPost.PUBLISHED.equals(post.getStatusPost())) || (userGroupAccess(personAuth) || ownedByUser(post, personAuth))) {
             post.setViews(post.getViews() + 1);
             postRepository.save(post);
         } else {
             throw new AccessException();
         }
+    }
+
+    private void assignDefaultValues(Post post) {
+        post.setPerson(authService.getPersonAuth());
+        post.setStatusPost(StatusPost.PUBLISHED);
+        post.setViews(0);
+    }
+
+    private boolean validCreated(Post post) {
+        return (post.getTitle() != null && post.getText() != null && post.getDescription() != null);
+    }
+
+    private boolean userGroupAccess(@NotNull Person personAuth) {
+        return personAuth.getPersonGroups().contains(PersonGroup.ADMIN);
+    }
+
+    private boolean ownedByUser(Post post, @NotNull Person personAuth) {
+        return post.getPerson().getId().equals(personAuth.getId());
     }
 }

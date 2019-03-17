@@ -14,7 +14,7 @@ public class Person {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "login", unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String login;
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -22,6 +22,8 @@ public class Person {
     private String lastName;
     @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
     private Collection<Comment> comments;
@@ -108,5 +110,13 @@ public class Person {
 
     public void setPosts(Collection<Post> posts) {
         this.posts = posts;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

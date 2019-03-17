@@ -1,15 +1,15 @@
 package ru.epam.blog.core.service;
 
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.entity.enums.PersonGroup;
-import ru.epam.blog.core.exce.ApiException;
-import ru.epam.blog.core.exce.InvalidBodyException;
-import ru.epam.blog.core.exce.LoginIsBusyException;
+import ru.epam.blog.core.exception.ApiException;
+import ru.epam.blog.core.exception.InvalidBodyException;
+import ru.epam.blog.core.exception.LoginIsBusyException;
 import ru.epam.blog.core.repository.PersonRepository;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 
 @Service
@@ -28,11 +28,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person registration(Person person) throws ApiException {
-        if (!this.check(person.getLogin())) {
+    public Person registration(@NotNull Person person) throws ApiException {
+        if (checkLoginAndEmail(person)) {
             if (this.validPerson(person)) {
-                person.setPersonGroups(Collections.singleton(PersonGroup.USER));
-                person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
+                assignDefaultValues(person);
                 return personRepository.add(person);
             } else {
                 throw new InvalidBodyException();
@@ -54,5 +53,14 @@ public class PersonServiceImpl implements PersonService {
 
     private boolean validPerson(Person person) {
         return (person.getPassword() != null && person.getFirstName() != null);
+    }
+
+    private void assignDefaultValues(@NotNull Person person) {
+        person.setPersonGroups(Collections.singleton(PersonGroup.USER));
+        person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
+    }
+
+    private boolean checkLoginAndEmail(@NotNull Person person) {
+        return personRepository.getByLogin(person.getLogin())== null && personRepository.getByEmail(person.getEmail()) == null;
     }
 }
