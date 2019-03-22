@@ -1,19 +1,24 @@
 package ru.epam.blog.core.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-public class Сategory {
+@Table(name = "category")
+public class MyCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer modulId;
+    @Column(name = "module_id")
+    private Integer moduleId;
     private String name;
     private String description;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "category_seo",
+            joinColumns = @JoinColumn(name="cat_id"),
+            inverseJoinColumns = @JoinColumn(name="seo_id")
+    )
     private SeoContainer seoContainer;
 
     public Integer getId() {
@@ -48,11 +53,11 @@ public class Сategory {
         this.seoContainer = seoContainer;
     }
 
-    public Integer getModulId() {
-        return modulId;
+    public Integer getModuleId() {
+        return moduleId;
     }
 
-    public void setModulId(Integer modulId) {
-        this.modulId = modulId;
+    public void setModuleId(Integer moduleId) {
+        this.moduleId = moduleId;
     }
 }

@@ -82,7 +82,7 @@
         
         <createTable tableName="category">
             <column name="id" type="integer" autoIncrement="true"/>
-            <column name="id_module" type="integer" autoIncrement="true"/>
+            <column name="module_id" type="integer" autoIncrement="true"/>
             <column name="name" type="varchar(40)">
                 <constraints nullable="false"/>
             </column>
@@ -92,7 +92,7 @@
                              deleteCascade="false"/>
             </column>
         </createTable>
-        <addPrimaryKey tableName="category" columnNames="id, id_module"/>
+        <addPrimaryKey tableName="category" columnNames="id, module_id"/>
 
     </changeSet>
 

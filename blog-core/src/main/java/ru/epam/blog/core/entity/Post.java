@@ -31,6 +31,11 @@ public class Post {
     @JoinColumn(name = "author_id")
     private Person person;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "post_seo",
+            joinColumns = @JoinColumn(name="post_id"),
+            inverseJoinColumns = @JoinColumn(name="seo_id")
+    )
     private SeoContainer seoContainer;
 
     public Integer getId() {
@@ -124,5 +129,13 @@ public class Post {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public SeoContainer getSeoContainer() {
+        return seoContainer;
+    }
+
+    public void setSeoContainer(SeoContainer seoContainer) {
+        this.seoContainer = seoContainer;
     }
 }
