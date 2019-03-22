@@ -1,6 +1,7 @@
 package ru.epam.blog.core.entity;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,15 +16,10 @@ public class SeoContainer {
     @Column(length = 140)
     private String description;
 
-    @ElementCollection(targetClass = Set.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "seo_words", joinColumns = {@JoinColumn(name = "id", nullable = false)})
+    @ElementCollection(targetClass = HashSet.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "seo_words", joinColumns = {@JoinColumn(name = "seo_id", nullable = false)})
+    @Column(name = "word")
     private Set<String> keyWords;
-
-    @OneToOne(mappedBy = "seoContainer")
-    private MyCategory myCategory;
-
-    @OneToOne(mappedBy = "seoContainer")
-    private Post post;
 
     public String getTitle() {
         return title;

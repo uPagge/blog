@@ -1,4 +1,4 @@
-package ru.epam.blog.core.pojo.dto;
+package ru.epam.blog.core.pojo.post;
 
 import javax.validation.constraints.NotNull;
 

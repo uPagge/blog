@@ -4,6 +4,7 @@ import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.exception.InvalidBodyException;
+import ru.epam.blog.core.pojo.dto.OffsetAndCount;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface PostService {
 
     void remove(Integer id) throws AccessException;
 
-    List<Post> getAllByStatus(StatusPost statusPost);
+    List<Post> getAllByStatus(StatusPost statusPost, OffsetAndCount offsetAndCount);
 
     Post getById(Integer idPost);
 

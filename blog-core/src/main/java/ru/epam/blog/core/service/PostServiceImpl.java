@@ -7,6 +7,7 @@ import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.exception.InvalidBodyException;
+import ru.epam.blog.core.pojo.dto.OffsetAndCount;
 import ru.epam.blog.core.repository.PostRepository;
 
 import javax.validation.constraints.NotNull;
@@ -50,8 +51,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllByStatus(StatusPost statusPost) {
-        return new ArrayList<>(postRepository.getAllByStatus(statusPost));
+    public List<Post> getAllByStatus(StatusPost statusPost, OffsetAndCount offsetAndCount) {
+        if (offsetAndCount.getOffset() == null) {
+            offsetAndCount.setOffset(0);
+        }
+        return new ArrayList<>(postRepository.getAllByStatus(statusPost, offsetAndCount));
     }
 
     @Override

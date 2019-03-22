@@ -29,6 +29,24 @@
         </createTable>
         <addPrimaryKey tableName="person_group" columnNames="person_id, person_group"/>
 
+        <createTable tableName="seo">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(80)"/>
+            <column name="description" type="varchar(140)"/>
+        </createTable>
+
+        <createTable tableName="seo_words">
+            <column name="seo_id" type="integer">
+                <constraints primaryKey="true" foreignKeyName="fk_seo_id" references="seo(id)"/>
+            </column>
+            <column name="word" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="seo_words" columnNames="seo_id, word"/>
+
         <createTable tableName="post">
             <column name="id" type="integer" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -47,6 +65,9 @@
             <column name="author_id" type="integer">
                 <constraints foreignKeyName="fk_person_id" references="person(id)" initiallyDeferred="true"
                              deleteCascade="false"/>
+            </column>
+            <column name="seo_id" type="integer">
+                <constraints foreignKeyName="fk_seo_id" references="seo(id)"/>
             </column>
         </createTable>
 
@@ -68,18 +89,7 @@
             </column>
         </createTable>
 
-        <createTable tableName="seo">
-            <column name="id" type="integer" autoIncrement="true"><constraints primaryKey="true"/> </column>
-            <column name="title" type="varchar(80)"/>
-            <column name="description" type="varchar(140)"/>
-        </createTable>
-        
-        <createTable tableName="seo_words">
-            <column name="seo_id" type="integer"><constraints primaryKey="true" foreignKeyName="fk_seo_id" references="seo(id)"/> </column>
-            <column name="word" type="varchar(20)"><constraints nullable="false"/> </column>
-        </createTable>
-        <addUniqueConstraint tableName="seo_words" columnNames="seo_id, word"/>
-        
+
         <createTable tableName="category">
             <column name="id" type="integer" autoIncrement="true"/>
             <column name="module_id" type="integer" autoIncrement="true"/>

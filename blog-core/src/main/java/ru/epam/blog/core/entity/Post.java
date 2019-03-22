@@ -24,18 +24,15 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private StatusPost statusPost;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private Person person;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "post_seo",
-            joinColumns = @JoinColumn(name="post_id"),
-            inverseJoinColumns = @JoinColumn(name="seo_id")
-    )
+    @OneToOne
+    @JoinColumn(name = "seo_id")
     private SeoContainer seoContainer;
 
     public Integer getId() {

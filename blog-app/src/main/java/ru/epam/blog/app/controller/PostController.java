@@ -9,10 +9,12 @@ import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.exception.InvalidBodyException;
-import ru.epam.blog.core.pojo.dto.PostDTO;
+import ru.epam.blog.core.pojo.dto.OffsetAndCount;
+import ru.epam.blog.core.pojo.post.PostDTO;
 import ru.epam.blog.core.pojo.vo.post.PostVO;
 import ru.epam.blog.core.service.PostService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,9 +30,9 @@ public class PostController {
         this.mapper = mapper;
     }
 
-    @GetMapping
-    public ResponseEntity<List<PostVO>> getAllPost() {
-        List<Post> posts = postService.getAllByStatus(StatusPost.PUBLISHED);
+    @GetMapping()
+    public ResponseEntity<List<PostVO>> getAllPost(@RequestBody @Valid OffsetAndCount offsetAndCount) {
+        List<Post> posts = postService.getAllByStatus(StatusPost.PUBLISHED, offsetAndCount);
         List<PostVO> postsVO = posts.stream().map(post1 -> {
             PostVO postVO = new PostVO();
             mapper.map(post1, postVO);

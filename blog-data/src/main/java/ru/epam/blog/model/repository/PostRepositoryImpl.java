@@ -1,8 +1,10 @@
 package ru.epam.blog.model.repository;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.StatusPost;
+import ru.epam.blog.core.pojo.dto.OffsetAndCount;
 import ru.epam.blog.core.repository.PostRepository;
 import ru.epam.blog.model.repository.jpa.PostRepositoryJpa;
 
@@ -25,8 +27,8 @@ public class PostRepositoryImpl implements PostRepository {
         postRepositoryJpa.deleteById(id);
     }
 
-    public Collection<Post> getAllByStatus(StatusPost statusPost) {
-        return postRepositoryJpa.findByStatusPost(statusPost);
+    public Collection<Post> getAllByStatus(StatusPost statusPost, OffsetAndCount offsetAndCount) {
+        return postRepositoryJpa.findAllByStatusPost(statusPost, PageRequest.of(offsetAndCount.getOffset(), offsetAndCount.getCount()));
     }
 
     public Post getById(Integer postId) {
