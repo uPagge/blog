@@ -1,0 +1,34 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="2" author="Struchkov Mark">
+        <insert tableName="person">
+            <column name="id" value="0"/>
+            <column name="username" value="root"/>
+            <column name="first_name" value="Mark"/>
+            <column name="password" value="$2a$10$H2tZ1hVS.m8PBfqQOWP5LOH1NYAuJhxu5YEyMSZmST32QUyaTFuDi"/>
+            <column name="email" value="upagge@mail.ru"/>
+        </insert>
+
+        <insert tableName="person_group">
+            <column name="person_id" value="0"/>
+            <column name="person_group" value="ADMIN"/>
+        </insert>
+        <insert tableName="person_group">
+            <column name="person_id" value="0"/>
+            <column name="person_group" value="USER"/>
+        </insert>
+
+        <insert tableName="post">
+            <column name="title" value="Британский парламент одобрил отсрочку Brexit"/>
+            <column name="description"
+                    value="Британские парламентарии поддержали продление срока Brexit с 29 марта на более позднюю дату."/>
+            <column name="status_post" value="PUBLISHED"/>
+            <column name="text" value="Британские парламентарии поддержали продление срока Brexit с 29 марта на более позднюю дату. За перенос высказались 412 депутатов, против — 202. Согласовать отсрочку теперь предстоит 27 странам — членам ЕС. Предложение правительства перенести срок сформулировано таким образом, что если до 20 марта парламент проголосует за соглашение с ЕС, которое уже дважды было отвергнуто подавляющим большинством, то речь будет идти об отсрочке Brexit до 30 июня. Если же парламент не поддержит соглашение, то потребуется более длительное продление срока Brexit, которое повлечет за собой участие Британии в европейских выборах в мае. Накануне парламент высказался против выхода из ЕС без соглашения при любых обстоятельствах. Однако если Британия и ЕС не ратифицируют соглашение, вариантом по умолчанию все равно остается выход без соглашения."/>
+            <column name="author_id" value="0"/>
+            <column name="views" value="0"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

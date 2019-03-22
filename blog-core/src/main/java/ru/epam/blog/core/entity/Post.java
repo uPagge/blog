@@ -31,6 +31,8 @@ public class Post {
     @JoinColumn(name = "author_id")
     private Person person;
 
+    private SeoContainer seoContainer;
+
     public Integer getId() {
         return id;
     }
