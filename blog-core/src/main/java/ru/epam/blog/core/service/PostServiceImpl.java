@@ -11,6 +11,7 @@ import ru.epam.blog.core.pojo.dto.OffsetAndCount;
 import ru.epam.blog.core.repository.PostRepository;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +99,7 @@ public class PostServiceImpl implements PostService {
         post.setPerson(authService.getPersonAuth());
         post.setStatusPost(StatusPost.PUBLISHED);
         post.setViews(0);
+        post.setDateCreate(LocalDate.now());
     }
 
     private boolean validCreated(Post post) {

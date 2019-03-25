@@ -3,6 +3,7 @@ package ru.epam.blog.core.entity;
 import ru.epam.blog.core.entity.enums.StatusPost;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -18,6 +19,10 @@ public class Post {
     @Column(nullable = false)
     private String title;
     private String description;
+
+    @Column(name = "date_create")
+    private LocalDate dateCreate;
+
     @Column(nullable = false)
     private String text;
     private Integer views;
@@ -147,5 +152,13 @@ public class Post {
 
     public void setSeoContainer(SeoContainer seoContainer) {
         this.seoContainer = seoContainer;
+    }
+
+    public LocalDate getDateCreate() {
+        return dateCreate;
+    }
+
+    public void setDateCreate(LocalDate dateCreate) {
+        this.dateCreate = dateCreate;
     }
 }
