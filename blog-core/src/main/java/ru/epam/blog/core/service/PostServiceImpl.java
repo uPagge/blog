@@ -6,7 +6,6 @@ import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exception.AccessException;
-import ru.epam.blog.core.exception.InvalidBodyException;
 import ru.epam.blog.core.pojo.dto.OffsetAndCount;
 import ru.epam.blog.core.repository.PostRepository;
 
@@ -28,12 +27,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post created(Post post) {
-        if (validCreated(post)) {
-            assignDefaultValues(post);
-            return postRepository.save(post);
-        } else {
-            throw new InvalidBodyException();
-        }
+        post.setPerson(authService.getPersonAuth());
+        post.setStatusPost(StatusPost.PUBLISHED);
+        post.setViews(0);
+        post.setDateCreate(LocalDate.now());
+        return postRepository.save(post);
     }
 
     @Override
@@ -93,17 +91,6 @@ public class PostServiceImpl implements PostService {
         } else {
             throw new AccessException();
         }
-    }
-
-    private void assignDefaultValues(Post post) {
-        post.setPerson(authService.getPersonAuth());
-        post.setStatusPost(StatusPost.PUBLISHED);
-        post.setViews(0);
-        post.setDateCreate(LocalDate.now());
-    }
-
-    private boolean validCreated(Post post) {
-        return (post.getTitle() != null && post.getText() != null && post.getDescription() != null);
     }
 
     private boolean userGroupAccess(@NotNull Person personAuth) {

@@ -11,7 +11,7 @@ import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.exception.ApiException;
 import ru.epam.blog.core.pojo.dto.OffsetAndCount;
-import ru.epam.blog.core.pojo.post.PostDTO;
+import ru.epam.blog.core.pojo.dto.post.PostDTO;
 import ru.epam.blog.core.pojo.vo.PersonMinVO;
 import ru.epam.blog.core.pojo.vo.post.PostVO;
 import ru.epam.blog.core.service.PostService;
