@@ -25,11 +25,16 @@ public class Person {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author")
     private Collection<Comment> comments;
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "person")
     private Collection<Post> posts;
+
+    @ManyToMany
+    @JoinTable(name = "like_post", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private Set<Post> likePost;
+
 
     @ElementCollection(targetClass = PersonGroup.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "person_group", joinColumns = {@JoinColumn(name = "person_id", nullable = false)})
@@ -118,5 +123,13 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Post> getLikePost() {
+        return likePost;
+    }
+
+    public void setLikePost(Set<Post> likePost) {
+        this.likePost = likePost;
     }
 }

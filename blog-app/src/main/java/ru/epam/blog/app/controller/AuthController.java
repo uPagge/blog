@@ -24,7 +24,6 @@ import ru.epam.blog.core.pojo.vo.PersonVO;
 import ru.epam.blog.core.service.PersonService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @RestController
 public class AuthController {
@@ -43,13 +42,13 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("login")
-    public ResponseEntity<String> generateToken(@RequestBody LoginAndPasswordDTO loginAndPasswordDTO) throws AuthorizationException {
+    public ResponseEntity generateToken(@RequestBody LoginAndPasswordDTO loginAndPasswordDTO) throws AuthorizationException {
         String username = loginAndPasswordDTO.getUsername();
         String password = loginAndPasswordDTO.getPassword();
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
         try {
             if (authenticationManager.authenticate(authentication).isAuthenticated()) {
-                return new ResponseEntity(TokenAuthenticationService.addAuthentication(username), HttpStatus.OK);
+                return ResponseEntity.status(HttpStatus.OK).body(TokenAuthenticationService.addAuthentication(username));
             } else {
                 throw new AuthorizationException();
             }
@@ -59,7 +58,7 @@ public class AuthController {
     }
 
     @PostMapping("registration")
-    public ResponseEntity<PersonVO> registration(@RequestBody @Valid RegistrationPersonDTO personDTO, BindingResult bindingResult) throws ApiException {
+    public ResponseEntity registration(@RequestBody @Valid RegistrationPersonDTO personDTO, BindingResult bindingResult) throws ApiException {
         if (bindingResult.hasErrors()) {
             throw new InvalidBodyException(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
@@ -67,7 +66,7 @@ public class AuthController {
         mapper.map(personDTO, person);
         PersonVO personVO = new PersonVO();
         mapper.map(personService.registration(person), personVO);
-        return new ResponseEntity<>(personVO, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(personVO);
     }
 
 }

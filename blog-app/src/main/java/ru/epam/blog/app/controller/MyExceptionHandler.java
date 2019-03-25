@@ -26,4 +26,12 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
         return exceptionVO;
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionVO getRuntimeException(ApiException apiException) {
+        ExceptionVO exceptionVO = new ExceptionVO();
+        mapper.map(apiException, exceptionVO);
+        return exceptionVO;
+    }
+
 }

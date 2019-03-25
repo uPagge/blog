@@ -3,6 +3,7 @@ package ru.epam.blog.core.entity;
 import ru.epam.blog.core.entity.enums.StatusPost;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,16 +25,28 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private StatusPost statusPost;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private Person person;
 
+    @ManyToMany
+    @JoinTable(name = "like_post", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "person_id"))
+    private Set<Person> likePerson = new HashSet<>();
+
     @OneToOne
     @JoinColumn(name = "seo_id")
     private SeoContainer seoContainer;
+
+    public Set<Person> getLikePerson() {
+        return likePerson;
+    }
+
+    public void setLikePerson(Set<Person> likePerson) {
+        this.likePerson = likePerson;
+    }
 
     public Integer getId() {
         return id;

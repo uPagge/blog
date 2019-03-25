@@ -34,17 +34,17 @@ public class CommentController {
 
     @PostMapping("post/{postId}/comment")
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<CommentVO> addNewComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer postId) throws AccessException {
+    public ResponseEntity addNewComment(@RequestBody CommentDTO commentDTO, @PathVariable Integer postId) throws AccessException {
         Comment comment = new Comment();
         mapper.map(commentDTO, comment);
         Comment commentCreate = commentService.add(comment, postId);
         CommentVO commentVO = new CommentVO();
         mapper.map(commentCreate, commentVO);
-        return new ResponseEntity<>(commentVO, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentVO);
     }
 
     @GetMapping("post/{postId}/comment")
-    public ResponseEntity<List<CommentVO>> getAllCommentPost(@PathVariable Integer postId) {
+    public ResponseEntity getAllCommentPost(@PathVariable Integer postId) {
         Post post = postService.getById(postId);
         Collection<Comment> comments = post.getComments();
         List<CommentVO> commentVOS = comments.stream().map(comment -> {
@@ -52,13 +52,13 @@ public class CommentController {
             mapper.map(comment, commentVO);
             return commentVO;
         }).collect(Collectors.toList());
-        return new ResponseEntity<>(commentVOS, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(commentVOS);
     }
 
     @DeleteMapping("comment/{commentId}")
     @PreAuthorize("hasAuthority('USER')")
-    public HttpStatus deleteComment(@PathVariable Integer commentId) throws AccessException {
+    public ResponseEntity deleteComment(@PathVariable Integer commentId) throws AccessException {
         commentService.delete(commentId);
-        return HttpStatus.OK;
+        return ResponseEntity.ok().build();
     }
 }

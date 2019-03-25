@@ -26,7 +26,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post created(Post post) throws InvalidBodyException {
+    public Post created(Post post) {
         if (validCreated(post)) {
             assignDefaultValues(post);
             return postRepository.save(post);
@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void remove(Integer id) throws AccessException {
+    public void remove(Integer id) {
         Post post = postRepository.getById(id);
         if (post != null) {
             Person personAuth = authService.getPersonAuth();
@@ -60,14 +60,34 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getById(Integer idPost) {
-        return postRepository.getById(idPost);
+        Post post = postRepository.getById(idPost);
+        if (post.getId() != null) {
+            return post;
+        } else {
+            throw new AccessException();
+        }
     }
 
     @Override
-    public void view(Post post) throws AccessException {
+    public void view(Post post) {
         Person personAuth = authService.getPersonAuth();
         if ((StatusPost.PUBLISHED.equals(post.getStatusPost())) || (userGroupAccess(personAuth) || ownedByUser(post, personAuth))) {
             post.setViews(post.getViews() + 1);
+            postRepository.save(post);
+        } else {
+            throw new AccessException();
+        }
+    }
+
+    @Override
+    public void like(Post post) {
+        Person person = authService.getPersonAuth();
+        if (StatusPost.PUBLISHED.equals(post.getStatusPost()) || userGroupAccess(person)) {
+            if (post.getLikePerson().contains(person)) {
+                post.getLikePerson().remove(person);
+            } else {
+                post.getLikePerson().add(person);
+            }
             postRepository.save(post);
         } else {
             throw new AccessException();

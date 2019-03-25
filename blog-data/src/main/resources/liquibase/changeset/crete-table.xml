@@ -104,6 +104,16 @@
         </createTable>
         <addPrimaryKey tableName="category" columnNames="id, module_id"/>
 
+        <createTable tableName="like_post">
+            <column name="post_id" type="integer">
+                <constraints foreignKeyName="fk_post_id" references="post(id)"/>
+            </column>
+            <column name="person_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="like_post" columnNames="post_id, person_id"/>
+
     </changeSet>
 
 </databaseChangeLog>

@@ -1,6 +1,6 @@
 package ru.epam.blog.core.exception;
 
-public class ApiException extends Exception {
+public class ApiException extends RuntimeException {
 
     private final Integer status;
     private final String error;
