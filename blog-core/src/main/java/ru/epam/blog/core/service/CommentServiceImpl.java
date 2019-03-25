@@ -9,6 +9,7 @@ import ru.epam.blog.core.entity.enums.StatusPost;
 import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.repository.CommentRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
             if (statusPostValid(post) || userGroupAccess()) {
                 comment.setPost(post);
                 comment.setAuthor(authService.getPersonAuth());
-                comment.setData(0);
+                comment.setTimeCreate(LocalDateTime.now());
                 return commentRepository.save(comment);
             } else {
                 throw new AccessException();

@@ -3,7 +3,7 @@ package ru.epam.blog.core.entity;
 import ru.epam.blog.core.entity.enums.StatusPost;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,8 +20,8 @@ public class Post {
     private String title;
     private String description;
 
-    @Column(name = "date_create")
-    private LocalDate dateCreate;
+    @Column(name = "time_create")
+    private LocalDateTime timeCreate;
 
     @Column(nullable = false)
     private String text;
@@ -154,11 +154,11 @@ public class Post {
         this.seoContainer = seoContainer;
     }
 
-    public LocalDate getDateCreate() {
-        return dateCreate;
+    public LocalDateTime getTimeCreate() {
+        return timeCreate;
     }
 
-    public void setDateCreate(LocalDate dateCreate) {
-        this.dateCreate = dateCreate;
+    public void setTimeCreate(LocalDateTime timeCreate) {
+        this.timeCreate = timeCreate;
     }
 }
