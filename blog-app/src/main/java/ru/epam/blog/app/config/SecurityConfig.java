@@ -13,10 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.epam.blog.app.proxy.UserDetailsServiceProxy;
-import ru.epam.blog.core.service.PersonService;
 import ru.epam.blog.app.service.auth.JWTAuthenticationFilter;
-
-import javax.servlet.http.HttpServletResponse;
+import ru.epam.blog.core.service.PersonService;
 
 @Configuration
 @EnableWebSecurity
@@ -29,14 +27,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable().exceptionHandling()
-                .authenticationEntryPoint(((httpServletRequest, httpServletResponse, e) -> httpServletResponse.sendError(HttpServletResponse.SC_ACCEPTED)))
-                .and()
+        http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/**/post/**").permitAll()
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).authorizeRequests();

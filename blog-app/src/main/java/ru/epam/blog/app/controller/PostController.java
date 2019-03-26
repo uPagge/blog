@@ -33,8 +33,8 @@ public class PostController {
         this.mapper = mapper;
     }
 
-    @GetMapping()
-    public ResponseEntity getAllPost(@RequestBody @Valid OffsetAndCount offsetAndCount) {
+    @GetMapping
+    public ResponseEntity<List<PostVO>> getAllPost(@RequestBody @Valid OffsetAndCount offsetAndCount) {
         List<Post> posts = postService.getAllByStatus(StatusPost.PUBLISHED, offsetAndCount);
         List<PostVO> postsVO = posts.stream().map(post1 -> {
             PostVO postVO = new PostVO();

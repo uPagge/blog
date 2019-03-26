@@ -42,7 +42,7 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("login")
-    public ResponseEntity generateToken(@RequestBody LoginAndPasswordDTO loginAndPasswordDTO) throws AuthorizationException {
+    public ResponseEntity<String> generateToken(@RequestBody LoginAndPasswordDTO loginAndPasswordDTO) throws AuthorizationException {
         String username = loginAndPasswordDTO.getUsername();
         String password = loginAndPasswordDTO.getPassword();
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
