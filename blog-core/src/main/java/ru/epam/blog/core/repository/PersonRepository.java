@@ -8,4 +8,5 @@ public interface PersonRepository {
 
     Person getByLogin(String login);
 
+    Person getByEmail(String email);
 }

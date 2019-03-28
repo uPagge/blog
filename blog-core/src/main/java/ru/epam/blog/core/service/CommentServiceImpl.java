@@ -1,16 +1,18 @@
 package ru.epam.blog.core.service;
 
 import org.springframework.stereotype.Service;
-import ru.epam.blog.core.entity.Comment;
+import ru.epam.blog.core.entity.CommentPost;
 import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
-import ru.epam.blog.core.exce.AccessException;
+import ru.epam.blog.core.exception.AccessException;
 import ru.epam.blog.core.repository.CommentRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -25,47 +27,61 @@ public class CommentServiceImpl implements CommentService {
         this.authService = authService;
     }
 
-
     @Override
-    public Comment add(Comment comment, Integer postId) throws AccessException {
+    public CommentPost add(CommentPost commentPost, Integer postId) throws AccessException {
         Post post = postService.getById(postId);
-        comment.setPost(post);
-        comment.setAuthor(authService.getPersonAuth());
-        comment.setData(0);
-        if (post.getStatusPost().equals(StatusPost.PUBLISHED) || authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
-            return commentRepository.save(comment);
+        if (statusPostValid(post) || userGroupAccess()) {
+            commentPost.setPost(post);
+            commentPost.setAuthor(authService.getPersonAuth());
+            commentPost.setTimeCreate(LocalDateTime.now());
+            List<CommentPost> commentPosts = post.getCommentPosts();
+            if (commentPosts != null) {
+                commentPost.setNumber(commentPosts.size());
+            } else {
+                commentPost.setNumber(0);
+            }
+            return commentRepository.save(commentPost);
         } else {
             throw new AccessException();
         }
     }
 
     @Override
-    public List<Comment> getAll() {
+    public List<CommentPost> getAll() {
         return new ArrayList<>(commentRepository.getAll());
     }
 
+
     @Override
-    public List<Comment> getByIdPost(Integer idPost) throws AccessException {
-        Post post = postService.getById(idPost);
-        if (post.getStatusPost().equals(StatusPost.PUBLISHED) ||
-                authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
-            return new ArrayList<>(commentRepository.getAllByIdPost(idPost));
+    public void delete(Integer postId, Integer numberId) {
+        CommentPost commentPost = Optional
+                .ofNullable(getByPostIdAndNumberId(postId, numberId))
+                .orElseThrow(AccessException::new);
+        Person personAuth = authService.getPersonAuth();
+        if (ownedByUser(commentPost, personAuth) || userGroupAccess()) {
+            commentRepository.delete(commentPost.getId());
         } else {
             throw new AccessException();
         }
     }
 
     @Override
-    public boolean delete(Integer commentId) throws AccessException {
-        Comment comment = commentRepository.getById(commentId);
-        Person personAuth = authService.getPersonAuth();
-        if (comment.getAuthor().getId().equals(personAuth.getId()) ||
-                authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN)) {
-            commentRepository.delete(commentId);
-            return true;
-        } else {
-            throw new AccessException();
-        }
+    public CommentPost getByPostIdAndNumberId(Integer postId, Integer commentNumber) {
+        return Optional
+                .ofNullable(commentRepository.getByPostIdAndCommentNumber(postId, commentNumber))
+                .orElseThrow(AccessException::new);
+    }
+
+    private boolean ownedByUser(CommentPost commentPost, Person person) {
+        return commentPost.getAuthor().getId().equals(person.getId());
+    }
+
+    private boolean userGroupAccess() {
+        return authService.getPersonAuth().getPersonGroups().contains(PersonGroup.ADMIN);
+    }
+
+    private boolean statusPostValid(Post post) {
+        return StatusPost.PUBLISHED.equals(post.getStatusPost());
     }
 
 

@@ -5,12 +5,15 @@ import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.entity.enums.StatusPost;
-import ru.epam.blog.core.exce.AccessException;
-import ru.epam.blog.core.exce.InvalidBodyException;
+import ru.epam.blog.core.exception.AccessException;
+import ru.epam.blog.core.pojo.dto.OffsetAndCount;
 import ru.epam.blog.core.repository.PostRepository;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -24,55 +27,70 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post created(Post post) throws InvalidBodyException {
-        if (validCreated(post)) {
-            post.setPerson(authService.getPersonAuth());
-            post.setStatusPost(StatusPost.PUBLISHED);
-            post.setViews(0);
-            return postRepository.save(post);
-        } else {
-            throw new InvalidBodyException();
-        }
-    }
-
-    private boolean validCreated(Post post) {
-        return (post.getTitle() != null && post.getText() != null && post.getDescription() != null);
+    public Post created(Post post) {
+        post.setPerson(authService.getPersonAuth());
+        post.setStatusPost(StatusPost.PUBLISHED);
+        post.setViews(0);
+        post.setTimeCreate(LocalDateTime.now());
+        return postRepository.save(post);
     }
 
     @Override
     public void remove(Integer id) {
-        Post post = postRepository.getById(id);
+        Post post = getById(id);
         Person personAuth = authService.getPersonAuth();
-        if (post.getPerson().getId().equals(personAuth.getId()) ||
-                personAuth.getPersonGroups().contains(PersonGroup.ADMIN)) {
+        if (ownedByUser(post, personAuth) || userGroupAccess(personAuth)) {
             postRepository.delete(id);
+        } else {
+            throw new AccessException();
         }
     }
 
     @Override
-    public List<Post> getAllByStatus(StatusPost statusPost) {
-        return new ArrayList<>(postRepository.getAllByStatus(statusPost));
+    public List<Post> getAllByStatus(StatusPost statusPost, OffsetAndCount offsetAndCount) {
+        if (offsetAndCount.getOffset() == null) {
+            offsetAndCount.setOffset(0);
+        }
+        return new ArrayList<>(postRepository.getAllByStatus(statusPost, offsetAndCount));
     }
 
     @Override
     public Post getById(Integer idPost) {
-        return postRepository.getById(idPost);
+        return Optional.ofNullable(postRepository.getById(idPost)).orElseThrow(AccessException::new);
     }
 
     @Override
-    public void view(Post post) throws AccessException {
+    public void view(Post post) {
         Person personAuth = authService.getPersonAuth();
-        if (post.getStatusPost().equals(StatusPost.PUBLISHED) ||
-                (personAuth != null &&
-                        (
-                                personAuth.getPersonGroups().contains(PersonGroup.ADMIN) || post.getPerson().getId().equals(personAuth.getId())
-                        )
-                )
-        ) {
+        if ((StatusPost.PUBLISHED.equals(post.getStatusPost())) || (userGroupAccess(personAuth) || ownedByUser(post, personAuth))) {
             post.setViews(post.getViews() + 1);
             postRepository.save(post);
         } else {
             throw new AccessException();
         }
+    }
+
+    @Override
+    public void like(Integer postId) {
+        Post post = getById(postId);
+        Person person = authService.getPersonAuth();
+        if (StatusPost.PUBLISHED.equals(post.getStatusPost()) || userGroupAccess(person)) {
+            if (post.getLikePerson().contains(person)) {
+                post.getLikePerson().remove(person);
+            } else {
+                post.getLikePerson().add(person);
+            }
+            postRepository.save(post);
+        } else {
+            throw new AccessException();
+        }
+    }
+
+    private boolean userGroupAccess(@NotNull Person personAuth) {
+        return personAuth.getPersonGroups().contains(PersonGroup.ADMIN);
+    }
+
+    private boolean ownedByUser(Post post, @NotNull Person personAuth) {
+        return post.getPerson().getId().equals(personAuth.getId());
     }
 }

@@ -1,10 +1,11 @@
 package ru.epam.blog.core.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Entity
-@Table(name = "comment")
-public class Comment {
+@MappedSuperclass
+public abstract class Comment {
 
     @Id
     @Column(name = "id")
@@ -12,28 +13,17 @@ public class Comment {
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-    @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
     private Person author;
 
     @Column(name = "message", nullable = false)
     private String message;
-    @Column(name = "data", nullable = false)
-    private Integer data;
 
-    public Comment() {
+    @Column(name = "time_create")
+    private LocalDateTime timeCreate;
 
-    }
-
-    public Comment(Post post, Person author, String message, Integer data) {
-        this.post = post;
-        this.author = author;
-        this.message = message;
-        this.data = data;
-    }
+    @Column
+    private Integer number;
 
     public Integer getId() {
         return id;
@@ -41,14 +31,6 @@ public class Comment {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
     }
 
     public Person getAuthor() {
@@ -67,11 +49,36 @@ public class Comment {
         this.message = message;
     }
 
-    public Integer getData() {
-        return data;
+    public LocalDateTime getTimeCreate() {
+        return timeCreate;
     }
 
-    public void setData(Integer data) {
-        this.data = data;
+    public void setTimeCreate(LocalDateTime timeCreate) {
+        this.timeCreate = timeCreate;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(id, comment.id) &&
+                Objects.equals(author, comment.author) &&
+                Objects.equals(message, comment.message) &&
+                Objects.equals(timeCreate, comment.timeCreate) &&
+                Objects.equals(number, comment.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, author, message, timeCreate, number);
     }
 }

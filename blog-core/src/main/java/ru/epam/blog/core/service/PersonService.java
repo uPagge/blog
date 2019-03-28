@@ -1,7 +1,7 @@
 package ru.epam.blog.core.service;
 
 import ru.epam.blog.core.entity.Person;
-import ru.epam.blog.core.exce.ApiException;
+import ru.epam.blog.core.exception.ApiException;
 
 public interface PersonService {
 

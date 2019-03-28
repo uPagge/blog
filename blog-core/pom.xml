@@ -6,8 +6,7 @@
 
     <groupId>ru.epam.blog</groupId>
     <artifactId>blog-core</artifactId>
-    <version>1.1.1-RELEASE</version>
-
+    <version>1.2.0-RELEASE</version>
     <build>
         <plugins>
             <plugin>
@@ -26,7 +25,6 @@
         <spring.security.core.ver>5.1.4.RELEASE</spring.security.core.ver>
         <validation.api.ver>2.0.1.Final</validation.api.ver>
     </properties>
-
 
     <dependencies>
         <dependency>

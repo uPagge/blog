@@ -1,0 +1,121 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="Struckov Mark">
+        <createTable tableName="person">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(20)"/>
+            <column name="username" type="varchar(50)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="varchar(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="text"/>
+        </createTable>
+
+        <createTable tableName="person_group">
+            <column name="person_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)"/>
+            </column>
+            <column name="person_group" type="varchar(20)"><constraints nullable="false"/> </column>
+        </createTable>
+        <addPrimaryKey tableName="person_group" columnNames="person_id, person_group"/>
+
+        <createTable tableName="seo">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(80)"/>
+            <column name="description" type="varchar(140)"/>
+        </createTable>
+
+        <createTable tableName="seo_words">
+            <column name="seo_id" type="integer">
+                <constraints primaryKey="true" foreignKeyName="fk_seo_id" references="seo(id)"/>
+            </column>
+            <column name="word" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="seo_words" columnNames="seo_id, word"/>
+
+        <createTable tableName="post">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="status_post" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_create" type="datetime"><constraints nullable="false"/> </column>
+            <column name="views" type="integer"/>
+            <column name="author_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)" initiallyDeferred="true"
+                             deleteCascade="false"/>
+            </column>
+            <column name="seo_id" type="integer">
+                <constraints foreignKeyName="fk_seo_id" references="seo(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="post_comment">
+            <column name="id" type="integer" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="post_id" type="integer">
+                <constraints foreignKeyName="fk_post_id" references="post(id)" nullable="false"/>
+            </column>
+            <column name="number" type="integer"><constraints nullable="false"/> </column>
+            <column name="author_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)" nullable="false"/>
+            </column>
+
+            <column name="time_create" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+           <column name="message" type="text"><constraints nullable="false"/> </column>
+        </createTable>
+        <addUniqueConstraint tableName="post_comment" columnNames="post_id, number"/>
+
+
+        <createTable tableName="category">
+            <column name="id" type="integer" autoIncrement="true"/>
+            <column name="module_id" type="integer" autoIncrement="true"/>
+            <column name="name" type="varchar(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+            <column name="seo" type="Integer">
+                <constraints foreignKeyName="fk_seo_id" references="seo(id)" initiallyDeferred="true"
+                             deleteCascade="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="category" columnNames="id, module_id"/>
+
+        <createTable tableName="like_post">
+            <column name="post_id" type="integer">
+                <constraints foreignKeyName="fk_post_id" references="post(id)"/>
+            </column>
+            <column name="person_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="like_post" columnNames="post_id, person_id"/>
+
+    </changeSet>
+
+</databaseChangeLog>

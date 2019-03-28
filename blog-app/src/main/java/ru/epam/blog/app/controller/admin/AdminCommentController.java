@@ -7,8 +7,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.epam.blog.core.entity.CommentPost;
 import ru.epam.blog.core.service.CommentService;
-import ru.epam.blog.app.utils.ResponseEntityGson;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/admin/comment")
@@ -22,7 +24,7 @@ public class AdminCommentController {
     }
 
     @GetMapping
-    public ResponseEntity<String> getAllComment() {
-        return ResponseEntityGson.getJson(commentService.getAll(), HttpStatus.OK);
+    public ResponseEntity<List<CommentPost>> getAllComment() {
+        return new ResponseEntity<>(commentService.getAll(), HttpStatus.OK);
     }
 }

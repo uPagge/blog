@@ -14,7 +14,7 @@ public class Person {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "login", unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false)
     private String login;
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -22,12 +22,19 @@ public class Person {
     private String lastName;
     @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private Collection<Comment> comments;
+    @OneToMany(mappedBy = "author")
+    private Collection<CommentPost> commentPosts;
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "person")
     private Collection<Post> posts;
+
+    @ManyToMany
+    @JoinTable(name = "like_post", joinColumns = @JoinColumn(name = "person_id"), inverseJoinColumns = @JoinColumn(name = "post_id"))
+    private Set<Post> likePost;
+
 
     @ElementCollection(targetClass = PersonGroup.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "person_group", joinColumns = {@JoinColumn(name = "person_id", nullable = false)})
@@ -94,12 +101,12 @@ public class Person {
         this.password = password;
     }
 
-    public Collection<Comment> getComments() {
-        return comments;
+    public Collection<CommentPost> getCommentPosts() {
+        return commentPosts;
     }
 
-    public void setComments(Collection<Comment> comments) {
-        this.comments = comments;
+    public void setCommentPosts(Collection<CommentPost> commentPosts) {
+        this.commentPosts = commentPosts;
     }
 
     public Collection<Post> getPosts() {
@@ -108,5 +115,21 @@ public class Person {
 
     public void setPosts(Collection<Post> posts) {
         this.posts = posts;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Set<Post> getLikePost() {
+        return likePost;
+    }
+
+    public void setLikePost(Set<Post> likePost) {
+        this.likePost = likePost;
     }
 }

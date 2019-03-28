@@ -18,7 +18,7 @@
     <modules>
         <module>blog-core</module>
         <module>blog-app</module>
-        <module>blog-model</module>
+        <module>blog-data</module>
     </modules>
 
     <developers>

@@ -1,16 +1,19 @@
 package ru.epam.blog.app.controller;
 
-import org.dozer.Mapper;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.epam.blog.app.utils.ResponseEntityGson;
 import ru.epam.blog.core.entity.Person;
-import ru.epam.blog.core.service.AuthService;
+import ru.epam.blog.core.entity.Post;
 import ru.epam.blog.core.pojo.vo.PersonVO;
+import ru.epam.blog.core.pojo.vo.post.PostVO;
+import ru.epam.blog.core.service.AuthService;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/person")
@@ -18,19 +21,28 @@ import ru.epam.blog.core.pojo.vo.PersonVO;
 public class PersonController {
 
     private final AuthService authService;
-    private final Mapper mapper;
+    private final ConversionService conversionService;
 
-    public PersonController(AuthService authService, Mapper mapper) {
+    public PersonController(AuthService authService, ConversionService conversionService) {
         this.authService = authService;
-        this.mapper = mapper;
+        this.conversionService = conversionService;
     }
 
     @GetMapping
-    public ResponseEntity<String> getInfoPerson() {
+    public ResponseEntity<PersonVO> getInfoPerson() {
         Person personAuth = authService.getPersonAuth();
-        PersonVO personVO = new PersonVO();
-        mapper.map(personAuth, personVO);
-        return ResponseEntityGson.getJson(personVO, HttpStatus.OK);
+        PersonVO personVO = conversionService.convert(personAuth, PersonVO.class);
+        return ResponseEntity.ok(personVO);
+    }
+
+    @GetMapping("like/post")
+    public ResponseEntity<Set<PostVO>> getLikePosts() {
+        Person personAuth = authService.getPersonAuth();
+        Set<Post> likePost = personAuth.getLikePost();
+        Set<PostVO> postsVO = likePost.stream()
+                .map(post -> conversionService.convert(post, PostVO.class))
+                .collect(Collectors.toSet());
+        return ResponseEntity.ok(postsVO);
     }
 
 }
