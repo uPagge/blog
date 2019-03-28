@@ -1,7 +1,6 @@
 package ru.epam.blog.app.controller;
 
-import org.dozer.Mapper;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,31 +21,28 @@ import java.util.stream.Collectors;
 public class PersonController {
 
     private final AuthService authService;
-    private final Mapper mapper;
+    private final ConversionService conversionService;
 
-    public PersonController(AuthService authService, Mapper mapper) {
+    public PersonController(AuthService authService, ConversionService conversionService) {
         this.authService = authService;
-        this.mapper = mapper;
+        this.conversionService = conversionService;
     }
 
     @GetMapping
-    public ResponseEntity getInfoPerson() {
+    public ResponseEntity<PersonVO> getInfoPerson() {
         Person personAuth = authService.getPersonAuth();
-        PersonVO personVO = new PersonVO();
-        mapper.map(personAuth, personVO);
-        return ResponseEntity.status(HttpStatus.OK).body(personVO);
+        PersonVO personVO = conversionService.convert(personAuth, PersonVO.class);
+        return ResponseEntity.ok(personVO);
     }
 
     @GetMapping("like/post")
-    public ResponseEntity getLikePosts() {
+    public ResponseEntity<Set<PostVO>> getLikePosts() {
         Person personAuth = authService.getPersonAuth();
         Set<Post> likePost = personAuth.getLikePost();
-        Set<PostVO> postsVO = likePost.stream().map(post1 -> {
-            PostVO postVO = new PostVO();
-            mapper.map(post1, postVO);
-            return postVO;
-        }).collect(Collectors.toSet());
-        return ResponseEntity.status(HttpStatus.OK).body(postsVO);
+        Set<PostVO> postsVO = likePost.stream()
+                .map(post -> conversionService.convert(post, PostVO.class))
+                .collect(Collectors.toSet());
+        return ResponseEntity.ok(postsVO);
     }
 
 }

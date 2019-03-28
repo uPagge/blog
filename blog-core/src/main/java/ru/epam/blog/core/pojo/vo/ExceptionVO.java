@@ -10,6 +10,12 @@ public class ExceptionVO {
     private String error;
     private String message;
 
+    public ExceptionVO(Integer status, String error, String message) {
+        this.status = status;
+        this.error = error;
+        this.message = message;
+    }
+
     public String getTimestamp() {
         return timestamp;
     }

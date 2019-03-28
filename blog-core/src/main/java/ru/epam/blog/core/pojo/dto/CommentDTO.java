@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class CommentDTO {
 
-    @NotNull
+    @NotNull(message = "Поле message должно быть задано")
     private String message;
 
     public String getMessage() {

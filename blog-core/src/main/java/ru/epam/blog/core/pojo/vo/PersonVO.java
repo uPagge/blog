@@ -1,5 +1,7 @@
 package ru.epam.blog.core.pojo.vo;
 
+import java.util.Objects;
+
 public class PersonVO {
 
     private Integer id;
@@ -7,6 +9,14 @@ public class PersonVO {
     private String lastName;
     private String firstName;
     private String email;
+
+    public PersonVO(Integer id, String login, String lastName, String firstName, String email) {
+        this.id = id;
+        this.login = login;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+    }
 
     public Integer getId() {
         return id;
@@ -46,5 +56,22 @@ public class PersonVO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PersonVO)) return false;
+        PersonVO personVO = (PersonVO) o;
+        return Objects.equals(id, personVO.id) &&
+                Objects.equals(login, personVO.login) &&
+                Objects.equals(lastName, personVO.lastName) &&
+                Objects.equals(firstName, personVO.firstName) &&
+                Objects.equals(email, personVO.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, lastName, firstName, email);
     }
 }

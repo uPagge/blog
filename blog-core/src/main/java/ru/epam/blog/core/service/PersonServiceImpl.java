@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.entity.enums.PersonGroup;
 import ru.epam.blog.core.exception.ApiException;
-import ru.epam.blog.core.exception.InvalidBodyException;
-import ru.epam.blog.core.exception.LoginIsBusyException;
+import ru.epam.blog.core.exception.RegistrationExceprion;
 import ru.epam.blog.core.repository.PersonRepository;
 
 import javax.validation.constraints.NotNull;
@@ -28,17 +27,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person registration(@NotNull Person person) throws ApiException {
-        if (checkLoginAndEmail(person)) {
-            if (this.validPerson(person)) {
-                assignDefaultValues(person);
-                return personRepository.add(person);
-            } else {
-                throw new InvalidBodyException();
-            }
-        } else {
-            throw new LoginIsBusyException(person.getLogin());
-        }
+    public Person registration(Person person) throws ApiException {
+        checkLoginAndEmail(person);
+        assignDefaultValues(person);
+        return personRepository.add(person);
     }
 
     @Override
@@ -51,16 +43,17 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.getByLogin(login).getId();
     }
 
-    private boolean validPerson(Person person) {
-        return (person.getPassword() != null && person.getFirstName() != null);
-    }
-
     private void assignDefaultValues(@NotNull Person person) {
         person.setPersonGroups(Collections.singleton(PersonGroup.USER));
         person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
     }
 
-    private boolean checkLoginAndEmail(@NotNull Person person) {
-        return personRepository.getByLogin(person.getLogin())== null && personRepository.getByEmail(person.getEmail()) == null;
+    private void checkLoginAndEmail(@NotNull Person person) {
+        if (personRepository.getByLogin(person.getLogin()) != null) {
+            throw new RegistrationExceprion("Пользователь с таким логином уже зарегистрирован");
+        }
+        if (personRepository.getByEmail(person.getEmail()) != null) {
+            throw new RegistrationExceprion("Пользователь с таким e-mail уже зарегистрирован");
+        }
     }
 }

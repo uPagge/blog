@@ -4,9 +4,7 @@ import ru.epam.blog.core.entity.enums.StatusPost;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "post")
@@ -31,7 +29,7 @@ public class Post {
     private StatusPost statusPost;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
+    private List<CommentPost> commentPosts = new ArrayList<>();
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id")
@@ -93,34 +91,6 @@ public class Post {
         this.statusPost = statusPost;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return Objects.equals(id, post.id) &&
-                Objects.equals(title, post.title) &&
-                Objects.equals(text, post.text) &&
-                Objects.equals(views, post.views) &&
-                statusPost == post.statusPost;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, text, views, statusPost);
-    }
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", text='" + text + '\'' +
-                ", views=" + views +
-                ", statusPost=" + statusPost +
-                '}';
-    }
-
     public String getDescription() {
         return description;
     }
@@ -138,14 +108,6 @@ public class Post {
         this.person = person;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
     public SeoContainer getSeoContainer() {
         return seoContainer;
     }
@@ -160,5 +122,36 @@ public class Post {
 
     public void setTimeCreate(LocalDateTime timeCreate) {
         this.timeCreate = timeCreate;
+    }
+
+    public List<CommentPost> getCommentPosts() {
+        return commentPosts;
+    }
+
+    public void setCommentPosts(List<CommentPost> commentPosts) {
+        this.commentPosts = commentPosts;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return Objects.equals(id, post.id) &&
+                Objects.equals(title, post.title) &&
+                Objects.equals(description, post.description) &&
+                Objects.equals(timeCreate, post.timeCreate) &&
+                Objects.equals(text, post.text) &&
+                Objects.equals(views, post.views) &&
+                statusPost == post.statusPost &&
+                Objects.equals(commentPosts, post.commentPosts) &&
+                Objects.equals(person, post.person) &&
+                Objects.equals(likePerson, post.likePerson) &&
+                Objects.equals(seoContainer, post.seoContainer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, timeCreate, text, views, statusPost, commentPosts, person, likePerson, seoContainer);
     }
 }

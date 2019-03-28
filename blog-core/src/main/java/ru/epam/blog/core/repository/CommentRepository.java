@@ -1,19 +1,21 @@
 package ru.epam.blog.core.repository;
 
-import ru.epam.blog.core.entity.Comment;
+import ru.epam.blog.core.entity.CommentPost;
 
 import java.util.Collection;
 
 public interface CommentRepository {
 
-    Comment save(Comment comment);
+    CommentPost save(CommentPost commentPost);
 
-    Collection<Comment> getAll();
+    Collection<CommentPost> getAll();
 
-    Collection<Comment> getAllByIdPost(Integer idPost);
+    Collection<CommentPost> getAllByIdPost(Integer postId);
 
-    Comment getById(Integer idCreate);
+    void delete(Integer commentId);
 
-    void delete(Integer id);
+    CommentPost getByPostIdAndCommentNumber(Integer postId, Integer number);
+
+    CommentPost getById(Integer commentId);
 
 }

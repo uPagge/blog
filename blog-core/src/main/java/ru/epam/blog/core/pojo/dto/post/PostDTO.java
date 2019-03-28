@@ -4,10 +4,10 @@ import javax.validation.constraints.NotNull;
 
 public class PostDTO {
 
-    @NotNull
+    @NotNull(message = "Поле title не может быть пустым")
     private String title;
     private String description;
-    @NotNull
+    @NotNull(message = "Поле text не может быть пустым")
     private String text;
 
     public String getTitle() {

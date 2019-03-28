@@ -49,12 +49,8 @@ public class TokenAuthenticationService implements AuthService {
     }
 
     public Person getPersonAuth() {
-        if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-            String login = SecurityContextHolder.getContext().getAuthentication().getName();
-            return personService.getByLogin(login);
-        } else {
-            return null;
-        }
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        return personService.getByLogin(login);
     }
 
 }

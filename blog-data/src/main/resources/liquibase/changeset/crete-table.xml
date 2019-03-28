@@ -61,7 +61,7 @@
             <column name="text" type="text">
                 <constraints nullable="false"/>
             </column>
-            <column name="time_create" type="datetime"/>
+            <column name="time_create" type="datetime"><constraints nullable="false"/> </column>
             <column name="views" type="integer"/>
             <column name="author_id" type="integer">
                 <constraints foreignKeyName="fk_person_id" references="person(id)" initiallyDeferred="true"
@@ -72,20 +72,24 @@
             </column>
         </createTable>
 
-        <createTable tableName="comment">
+        <createTable tableName="post_comment">
             <column name="id" type="integer" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="post_id" type="integer">
+                <constraints foreignKeyName="fk_post_id" references="post(id)" nullable="false"/>
+            </column>
+            <column name="number" type="integer"><constraints nullable="false"/> </column>
+            <column name="author_id" type="integer">
+                <constraints foreignKeyName="fk_person_id" references="person(id)" nullable="false"/>
+            </column>
+
             <column name="time_create" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="author_id" type="integer">
-                <constraints foreignKeyName="fk_person_id" references="person(id)"/>
-            </column>
-            <column name="post_id" type="integer">
-                <constraints foreignKeyName="fk_post_id" references="post(id)"/>
-            </column>
+           <column name="message" type="text"><constraints nullable="false"/> </column>
         </createTable>
+        <addUniqueConstraint tableName="post_comment" columnNames="post_id, number"/>
 
 
         <createTable tableName="category">

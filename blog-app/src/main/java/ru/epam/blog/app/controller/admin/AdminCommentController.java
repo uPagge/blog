@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.epam.blog.core.entity.Comment;
+import ru.epam.blog.core.entity.CommentPost;
 import ru.epam.blog.core.service.CommentService;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class AdminCommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getAllComment() {
+    public ResponseEntity<List<CommentPost>> getAllComment() {
         return new ResponseEntity<>(commentService.getAll(), HttpStatus.OK);
     }
 }

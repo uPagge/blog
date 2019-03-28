@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -36,14 +37,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void remove(Integer id) {
-        Post post = postRepository.getById(id);
-        if (post != null) {
-            Person personAuth = authService.getPersonAuth();
-            if (ownedByUser(post, personAuth) || userGroupAccess(personAuth)) {
-                postRepository.delete(id);
-            } else {
-                throw new AccessException();
-            }
+        Post post = getById(id);
+        Person personAuth = authService.getPersonAuth();
+        if (ownedByUser(post, personAuth) || userGroupAccess(personAuth)) {
+            postRepository.delete(id);
         } else {
             throw new AccessException();
         }
@@ -59,12 +56,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getById(Integer idPost) {
-        Post post = postRepository.getById(idPost);
-        if (post.getId() != null) {
-            return post;
-        } else {
-            throw new AccessException();
-        }
+        return Optional.ofNullable(postRepository.getById(idPost)).orElseThrow(AccessException::new);
     }
 
     @Override
@@ -79,7 +71,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void like(Post post) {
+    public void like(Integer postId) {
+        Post post = getById(postId);
         Person person = authService.getPersonAuth();
         if (StatusPost.PUBLISHED.equals(post.getStatusPost()) || userGroupAccess(person)) {
             if (post.getLikePerson().contains(person)) {

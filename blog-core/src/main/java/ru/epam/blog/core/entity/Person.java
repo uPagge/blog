@@ -26,7 +26,7 @@ public class Person {
     private String email;
 
     @OneToMany(mappedBy = "author")
-    private Collection<Comment> comments;
+    private Collection<CommentPost> commentPosts;
 
     @OneToMany(mappedBy = "person")
     private Collection<Post> posts;
@@ -101,12 +101,12 @@ public class Person {
         this.password = password;
     }
 
-    public Collection<Comment> getComments() {
-        return comments;
+    public Collection<CommentPost> getCommentPosts() {
+        return commentPosts;
     }
 
-    public void setComments(Collection<Comment> comments) {
-        this.comments = comments;
+    public void setCommentPosts(Collection<CommentPost> commentPosts) {
+        this.commentPosts = commentPosts;
     }
 
     public Collection<Post> getPosts() {

@@ -1,12 +1,14 @@
 package ru.epam.blog.model.repository.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.epam.blog.core.entity.Comment;
+import ru.epam.blog.core.entity.CommentPost;
 
 import java.util.List;
 
-public interface CommentRepositoryJpa extends JpaRepository<Comment, Integer> {
+public interface CommentRepositoryJpa extends JpaRepository<CommentPost, Integer> {
 
-    List<Comment> findByPostId(Integer postId);
+    List<CommentPost> findByPostId(Integer postId);
+
+    CommentPost findByPostIdAndNumber(Integer postId, Integer number);
 
 }

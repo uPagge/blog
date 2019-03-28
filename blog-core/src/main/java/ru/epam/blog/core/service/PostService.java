@@ -18,6 +18,6 @@ public interface PostService {
 
     void view(Post post);
 
-    void like(Post post);
+    void like(Integer post);
 
 }

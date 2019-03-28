@@ -5,4 +5,8 @@ public class AccessException extends ApiException {
     public AccessException() {
         super(435, "Access is denied");
     }
+
+    public AccessException(String description) {
+        super(435, description, "Access is denied");
+    }
 }
