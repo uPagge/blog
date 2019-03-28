@@ -11,7 +11,11 @@
 
     <groupId>ru.epam.blog</groupId>
     <artifactId>blog-model</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0-RELEASE</version>
+
+    <properties>
+        <blog.core.ver>1.2.0-RELEASE</blog.core.ver>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -25,13 +29,22 @@
         <dependency>
             <groupId>ru.epam.blog</groupId>
             <artifactId>blog-core</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <version>${blog.core.ver}</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
     </dependencies>
+
+    <developers>
+        <developer>
+            <name>Struchkov Mark</name>
+            <email>upagge@mail.ru</email>
+            <organization>SADTECH</organization>
+        </developer>
+    </developers>
 
 
 </project>
