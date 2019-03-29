@@ -1,5 +1,7 @@
 package ru.epam.blog.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.epam.blog.app.service.auth.TokenAuthenticationService;
 import ru.epam.blog.app.utils.BindResult;
+import ru.epam.blog.app.vo.Token;
 import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.exception.ApiException;
 import ru.epam.blog.core.exception.AuthorizationException;
@@ -25,6 +28,7 @@ import ru.epam.blog.core.service.PersonService;
 import javax.validation.Valid;
 
 @RestController
+@Api("Контроллер отвечает за авторизацию пользователей")
 public class AuthController {
 
     public static final Logger log = Logger.getLogger(AuthController.class);
@@ -39,8 +43,9 @@ public class AuthController {
         this.conversionService = conversionService;
     }
 
+    @ApiOperation("Вход зарегистрированных пользователей. Отдает JWT токен")
     @PostMapping("login")
-    public ResponseEntity<String> generateToken(@RequestBody @Valid LoginAndPasswordDTO loginAndPasswordDTO, BindingResult bindingResult) throws AuthorizationException {
+    public ResponseEntity<Token> generateToken(@RequestBody @Valid LoginAndPasswordDTO loginAndPasswordDTO, BindingResult bindingResult) throws AuthorizationException {
         BindResult.getErrors(bindingResult);
         String username = loginAndPasswordDTO.getUsername();
         String password = loginAndPasswordDTO.getPassword();
@@ -56,6 +61,7 @@ public class AuthController {
         }
     }
 
+    @ApiOperation("Регистрация новых пользователей")
     @PostMapping("registration")
     public ResponseEntity<PersonVO> registration(@RequestBody @Valid RegistrationPersonDTO personDTO, BindingResult bindingResult) throws ApiException {
         BindResult.getErrors(bindingResult);

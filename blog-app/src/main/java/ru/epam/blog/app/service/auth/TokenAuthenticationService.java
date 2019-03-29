@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.epam.blog.app.proxy.UserDetailsProxy;
+import ru.epam.blog.app.vo.Token;
 import ru.epam.blog.core.entity.Person;
 import ru.epam.blog.core.service.AuthService;
 import ru.epam.blog.core.service.PersonService;
@@ -31,10 +32,11 @@ public class TokenAuthenticationService implements AuthService {
         this.personService = personService;
     }
 
-    public static String addAuthentication(String username) {
-        return Jwts.builder().setSubject(username)
+    public static Token addAuthentication(String username) {
+        String tokenKey = Jwts.builder().setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET).compact();
+        return new Token(tokenKey, "bearer");
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {

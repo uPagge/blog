@@ -1,5 +1,7 @@
 package ru.epam.blog.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Api("Управление комментариями к постам блога")
 @RestController
 @RequestMapping("api/v1/post")
 public class CommentPostController {
@@ -33,6 +36,7 @@ public class CommentPostController {
         this.commentService = commentService;
     }
 
+    @ApiOperation("Получить все комментарии к посту")
     @GetMapping("{postId}/comment")
     public ResponseEntity<Set<CommentVO>> getAllCommentsByPost(@PathVariable Integer postId) {
         List<CommentPost> commentPosts = postService.getById(postId).getCommentPosts();
@@ -42,6 +46,7 @@ public class CommentPostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentVOS);
     }
 
+    @ApiOperation("Добавить новый комментарий к посту")
     @PostMapping("{postId}/comment")
     public ResponseEntity<CommentVO> addNewComment(@PathVariable Integer postId,
                                                    @RequestBody @Valid CommentDTO commentDTO,
@@ -53,6 +58,8 @@ public class CommentPostController {
                 .body(conversionService.convert(commentPost, CommentVO.class));
     }
 
+
+    @ApiOperation("Получить конкретный комментарий у поста по порядковому номеру комментария")
     @GetMapping("{postId}/comment/{commentId}")
     public ResponseEntity<CommentVO> getCommentsByPostIdAndNumberComment(@PathVariable Integer postId,
                                                                          @PathVariable Integer commentId) {
@@ -64,6 +71,7 @@ public class CommentPostController {
         return ResponseEntity.ok(conversionService.convert(commentPost, CommentVO.class));
     }
 
+    @ApiOperation("Удалить комментарий к посту")
     @DeleteMapping("{postId}/comment/{commentId}")
     public HttpStatus deleteOnComment(@PathVariable Integer postId,
                                       @PathVariable Integer commentId) {

@@ -1,5 +1,7 @@
 package ru.epam.blog.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,7 @@ import ru.epam.blog.core.service.AuthService;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Api("Управляет пользователями на сайте")
 @RestController
 @RequestMapping("api/v1/person")
 @PreAuthorize("hasAnyAuthority('USER')")
@@ -28,6 +31,7 @@ public class PersonController {
         this.conversionService = conversionService;
     }
 
+    @ApiOperation("Получить информацию о текущем авторизованом пользователе")
     @GetMapping
     public ResponseEntity<PersonVO> getInfoPerson() {
         Person personAuth = authService.getPersonAuth();
@@ -35,6 +39,7 @@ public class PersonController {
         return ResponseEntity.ok(personVO);
     }
 
+    @ApiOperation("Получить посты блога, кторые лайкнул пользователь")
     @GetMapping("like/post")
     public ResponseEntity<Set<PostVO>> getLikePosts() {
         Person personAuth = authService.getPersonAuth();

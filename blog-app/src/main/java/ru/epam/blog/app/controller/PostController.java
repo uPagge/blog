@@ -1,5 +1,7 @@
 package ru.epam.blog.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Api("Управляет постами в блоге")
 @RestController
 @RequestMapping("api/v1/post")
 public class PostController {
@@ -33,6 +36,7 @@ public class PostController {
         this.conversionService = conversionService;
     }
 
+    @ApiOperation("Позволяет получить все посты! Используется подход с колличеством постов и смещением")
     @PostMapping("/all")
     public ResponseEntity<List<PostVO>> getAllPost(@RequestBody @Valid OffsetAndCount offsetAndCount, BindingResult bindingResult) {
         BindResult.getErrors(bindingResult);
@@ -43,12 +47,14 @@ public class PostController {
         return ResponseEntity.ok(postsVO);
     }
 
+    @ApiOperation("Удаление поста по id")
     @DeleteMapping("/{postId}")
     public HttpStatus delete(@PathVariable Integer postId) {
         postService.remove(postId);
         return HttpStatus.OK;
     }
 
+    @ApiOperation("Получить информацию о посте по id")
     @GetMapping("{postId}")
     public ResponseEntity<PostVO> getPostInfo(@PathVariable Integer postId) {
         Post post = postService.getById(postId);
@@ -57,12 +63,14 @@ public class PostController {
         return ResponseEntity.ok(postVO);
     }
 
+    @ApiOperation("Поставить/Снять лайк с поста")
     @PostMapping("{postId}/like")
     public HttpStatus likedPost(@PathVariable Integer postId) {
         postService.like(postId);
         return HttpStatus.OK;
     }
 
+    @ApiOperation("Посмотреть всех пользователей, которые поставили лайк")
     @GetMapping("{postId}/like/person")
     public ResponseEntity<Set<PersonLoginVO>> likePersons(@PathVariable Integer postId) {
         Post post = postService.getById(postId);
@@ -73,6 +81,7 @@ public class PostController {
         return ResponseEntity.ok(likePersonsVO);
     }
 
+    @ApiOperation("Добавить новый пост в блог")
     @PostMapping
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<PostVO> create(@RequestBody @Valid PostDTO postDTO, BindingResult bindingResult) {
