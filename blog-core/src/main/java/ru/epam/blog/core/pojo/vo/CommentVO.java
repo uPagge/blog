@@ -1,24 +1,28 @@
 package ru.epam.blog.core.pojo.vo;
 
+import ru.epam.blog.core.entity.enums.ContentType;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class CommentVO {
 
     private Integer id;
-    private Integer postId;
+    private Integer contentId;
     private Integer authorId;
     private Integer number;
     private String message;
     private LocalDateTime data;
+    private ContentType contentType;
 
-    public CommentVO(Integer id, Integer postId, Integer authorId, Integer number, String message, LocalDateTime data) {
+    public CommentVO(Integer id, Integer contentId, Integer authorId, Integer number, String message, LocalDateTime data, ContentType contentType) {
         this.id = id;
-        this.postId = postId;
+        this.contentId = contentId;
         this.authorId = authorId;
         this.number = number;
         this.message = message;
         this.data = data;
+        this.contentType = contentType;
     }
 
     public Integer getNumber() {
@@ -37,12 +41,12 @@ public class CommentVO {
         this.id = id;
     }
 
-    public Integer getPostId() {
-        return postId;
+    public Integer getContentId() {
+        return contentId;
     }
 
-    public void setPostId(Integer postId) {
-        this.postId = postId;
+    public void setContentId(Integer contentId) {
+        this.contentId = contentId;
     }
 
     public Integer getAuthorId() {
@@ -75,7 +79,7 @@ public class CommentVO {
         if (o == null || getClass() != o.getClass()) return false;
         CommentVO commentVO = (CommentVO) o;
         return Objects.equals(id, commentVO.id) &&
-                Objects.equals(postId, commentVO.postId) &&
+                Objects.equals(contentId, commentVO.contentId) &&
                 Objects.equals(authorId, commentVO.authorId) &&
                 Objects.equals(number, commentVO.number) &&
                 Objects.equals(message, commentVO.message) &&
@@ -84,6 +88,14 @@ public class CommentVO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, postId, authorId, number, message, data);
+        return Objects.hash(id, contentId, authorId, number, message, data);
+    }
+
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
     }
 }

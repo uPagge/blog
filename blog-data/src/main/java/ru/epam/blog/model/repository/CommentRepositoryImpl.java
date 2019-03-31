@@ -1,7 +1,6 @@
 package ru.epam.blog.model.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.epam.blog.core.entity.Comment;
 import ru.epam.blog.core.entity.CommentPost;
 import ru.epam.blog.core.repository.CommentRepository;
 import ru.epam.blog.model.repository.jpa.CommentRepositoryJpa;
@@ -29,7 +28,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Collection<CommentPost> getAllByIdPost(Integer postId) {
-        return commentRepositoryJpa.findByPostId(postId);
+        return commentRepositoryJpa.findByContentId(postId);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public CommentPost getByPostIdAndCommentNumber(Integer postId, Integer number) {
-        return commentRepositoryJpa.findByPostIdAndNumber(postId, number);
+        return commentRepositoryJpa.findByContentIdAndNumber(postId, number);
     }
 
     @Override

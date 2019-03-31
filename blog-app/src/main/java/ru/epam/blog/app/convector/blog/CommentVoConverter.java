@@ -15,10 +15,11 @@ public class CommentVoConverter implements Converter<CommentPost, CommentVO> {
     public CommentVO convert(CommentPost source) {
         return new CommentVO(
                 source.getId(),
-                source.getPost().getId(),
+                source.getContent().getId(),
                 source.getAuthor().getId(),
                 source.getNumber(),
                 source.getMessage(),
-                source.getTimeCreate());
+                source.getTimeCreate(),
+                source.getContentType());
     }
 }

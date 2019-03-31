@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentPost add(CommentPost commentPost, Integer postId) throws AccessException {
         Post post = postService.getById(postId);
         if (statusPostValid(post) || userGroupAccess()) {
-            commentPost.setPost(post);
+            commentPost.setContent(post);
             commentPost.setAuthor(authService.getPersonAuth());
             commentPost.setTimeCreate(LocalDateTime.now());
             List<CommentPost> commentPosts = post.getCommentPosts();

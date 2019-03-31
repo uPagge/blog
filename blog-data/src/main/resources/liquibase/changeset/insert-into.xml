@@ -59,20 +59,22 @@
         </insert>
     </changeSet>
 
-    <changeSet id="insert-post-comment" author="Struchkov Mark">
-        <insert tableName="post_comment">
+    <changeSet id="insert-comment" author="Struchkov Mark">
+        <insert tableName="comment">
             <column name="author_id" value="1"/>
             <column name="message" value="Хаю хай, с вами иван гай"/>
-            <column name="post_id" value="1"/>
             <column name="time_create" value="2007-08-09T13:14:15"/>
+            <column name="content_id" value="1"/>
+            <column name="content_type" value="POST"/>
             <column name="number" value="0"/>
         </insert>
 
-        <insert tableName="post_comment">
+        <insert tableName="comment">
             <column name="author_id" value="2"/>
-            <column name="message" value="Приветик, как дела"/>
-            <column name="post_id" value="1"/>
+            <column name="message" value="Приветик, как дела?"/>
             <column name="time_create" value="2007-08-09T13:14:15"/>
+            <column name="content_id" value="1"/>
+            <column name="content_type" value="POST"/>
             <column name="number" value="1"/>
         </insert>
     </changeSet>
